@@ -1,22 +1,9 @@
 from copy import deepcopy
 
 import flet
-from flet import AppBar
-from flet import Card
-from flet import Column
-from flet import Container
-from flet import ElevatedButton
-from flet import IconButton
-from flet import NavigationRail
-from flet import NavigationRailDestination
-from flet import Page
-from flet import Row
-from flet import Stack
-from flet import Switch
-from flet import Text
-from flet import VerticalDivider
-from flet import colors
-from flet import icons
+from flet import (AppBar, Card, Column, Container, ElevatedButton, IconButton,
+                  NavigationRail, NavigationRailDestination, Page, Row, Stack,
+                  Switch, Text, VerticalDivider, colors, icons)
 from flet.utils import slugify
 
 
