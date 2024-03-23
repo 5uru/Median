@@ -1,30 +1,15 @@
 import flet as ft
 
+from components.weather_widget import Weather, WeatherAsync
+
 
 def main(page: ft.Page):
-    page.title = "Flet counter example"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
-    txt_number = ft.TextField(value="0", text_align=ft.TextAlign.RIGHT, width=100)
+    weather_widget = Weather()
+    weather_widget_async = WeatherAsync()
 
-    def minus_click(e):
-        txt_number.value = str(int(txt_number.value) - 1)
-        page.update()
-
-    def plus_click(e):
-        txt_number.value = str(int(txt_number.value) + 1)
-        page.update()
-
-    page.add(
-        ft.Row(
-            [
-                ft.IconButton(ft.icons.REMOVE, on_click=minus_click),
-                txt_number,
-                ft.IconButton(ft.icons.ADD, on_click=plus_click),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-        ),
-    )
+    page.add(weather_widget)
+    page.add(weather_widget_async)
 
 
-ft.app(target=main)
+ft.app(main)
