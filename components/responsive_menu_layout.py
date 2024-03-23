@@ -45,7 +45,8 @@ class ResponsiveMenuLayout(Row):
 
         self.expand = True
 
-        self.navigation_items = [navigation_item for navigation_item, _ in pages]
+        self.navigation_items = [
+            navigation_item for navigation_item, _ in pages]
         self.routes = [
             f"/{item.pop('route', None) or slugify(item['label'])}"
             for item in self.navigation_items
@@ -218,13 +219,15 @@ class ResponsiveMenuLayout(Row):
                 )
                 self.controls = [
                     Stack(
-                        controls=[self.content_area, dismiss_shield, self.menu_panel],
+                        controls=[self.content_area,
+                                  dismiss_shield, self.menu_panel],
                         expand=True,
                     )
                 ]
             else:
                 self.controls = [
-                    Stack(controls=[self.content_area, self.menu_panel], expand=True)
+                    Stack(controls=[self.content_area,
+                          self.menu_panel], expand=True)
                 ]
             self.update_destinations()
             self.navigation_rail.extended = self.menu_extended
@@ -383,7 +386,8 @@ if __name__ == "__main__":
                 Column(
                     horizontal_alignment="stretch",
                     controls=[
-                        Card(content=Container(Text(title, weight="bold"), padding=8)),
+                        Card(content=Container(
+                            Text(title, weight="bold"), padding=8)),
                         Text(body),
                     ],
                     expand=True,
