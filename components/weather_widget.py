@@ -56,14 +56,16 @@ class Weather(ft.Container):
 
     def update_weather(self):
         while self.running:
-            response = requests.get(self.OWM_Endpoint, params=self.get_weather_params())
+            response = requests.get(
+                self.OWM_Endpoint, params=self.get_weather_params())
             response.raise_for_status()
             weather_data = response.json()
 
             self.description_text.value = weather_data["weather"][0][
                 "description"
             ].capitalize()
-            self.temp_text.value = self.display_temp(weather_data["main"]["temp"])
+            self.temp_text.value = self.display_temp(
+                weather_data["main"]["temp"])
             icon_file = weather_data["weather"][0]["icon"]
             self.weather_icon.src_base64 = None
             self.weather_icon.src = (
@@ -136,7 +138,8 @@ class WeatherAsync(ft.Container):
             self.description_text.value = weather_data["weather"][0][
                 "description"
             ].capitalize()
-            self.temp_text.value = self.display_temp(weather_data["main"]["temp"])
+            self.temp_text.value = self.display_temp(
+                weather_data["main"]["temp"])
             icon_file = weather_data["weather"][0]["icon"]
             self.weather_icon.src_base64 = None
             self.weather_icon.src = (

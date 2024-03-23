@@ -34,7 +34,8 @@ class DesktopAppLayout(Row):
 
         self.expand = True
 
-        self.navigation_items = [navigation_item for navigation_item, _ in pages]
+        self.navigation_items = [
+            navigation_item for navigation_item, _ in pages]
         self.navigation_rail = self.build_navigation_rail()
         self.update_destinations()
         self._menu_extended = True
