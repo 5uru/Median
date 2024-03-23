@@ -57,20 +57,32 @@ class DesktopAppLayout(Row):
         self.page.title = title
 
     def select_page(self, page_number):
+        """
+
+        :param page_number: 
+
+        """
         self.navigation_rail.selected_index = page_number
         self._change_displayed_page()
 
     def _navigation_change(self, e):
+        """
+
+        :param e: 
+
+        """
         self._change_displayed_page()
         self.page.update()
 
     def _change_displayed_page(self):
+        """ """
         page_number = self.navigation_rail.selected_index
         for i, content_page in enumerate(self.content_area.controls):
             # update selected page
             content_page.visible = page_number == i
 
     def build_navigation_rail(self):
+        """ """
         return NavigationRail(
             selected_index=0,
             label_type="none",
@@ -79,28 +91,38 @@ class DesktopAppLayout(Row):
         )
 
     def update_destinations(self):
+        """ """
         self.navigation_rail.destinations = self.navigation_items
         self.navigation_rail.label_type = "all"
 
     def handle_resize(self, e):
+        """
+
+        :param e: 
+
+        """
         pass
 
     def set_content(self):
+        """ """
         self.controls = [self.menu_panel, self.content_area]
         self.update_destinations()
         self.navigation_rail.extended = self._menu_extended
         self.menu_panel.visible = self._panel_visible
 
     def is_portrait(self) -> bool:
+        """ """
         # Return true if window/display is narrow
         # return self.page.window_height >= self.page.window_width
         return self.page.height >= self.page.width
 
     def is_landscape(self) -> bool:
+        """ """
         # Return true if window/display is wide
         return self.page.width > self.page.height
 
     def create_appbar(self) -> AppBar:
+        """ """
         appbar = AppBar(
             # leading=menu_button,
             # leading_width=40,
@@ -132,6 +154,12 @@ class DesktopAppLayout(Row):
 
 
 def create_page(title: str, body: str):
+    """
+
+    :param title: str: 
+    :param body: str: 
+
+    """
     return Row(
         controls=[
             Column(
@@ -148,6 +176,11 @@ def create_page(title: str, body: str):
 
 
 def main(page: Page):
+    """
+
+    :param page: Page: 
+
+    """
 
     pages = [
         (
