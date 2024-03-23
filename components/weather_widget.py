@@ -10,6 +10,7 @@ import requests
 
 class Weather(ft.Container):
     """ """
+
     def __init__(self, height=200, width=200, bgcolor=ft.colors.BLUE_200):
         super().__init__()
         self.OWM_Endpoint = "https://api.openweathermap.org/data/2.5/weather"
@@ -22,7 +23,8 @@ class Weather(ft.Container):
         self.description_text = ft.Text(style=ft.TextStyle(size=20))
         self.weather_icon = ft.Image(
             # empty image
-            src_base64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+            src_base64=
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
             height=100,
             width=100,
         )
@@ -61,19 +63,19 @@ class Weather(ft.Container):
     def update_weather(self):
         """ """
         while self.running:
-            response = requests.get(self.OWM_Endpoint, params=self.get_weather_params())
+            response = requests.get(self.OWM_Endpoint,
+                                    params=self.get_weather_params())
             response.raise_for_status()
             weather_data = response.json()
 
             self.description_text.value = weather_data["weather"][0][
-                "description"
-            ].capitalize()
-            self.temp_text.value = self.display_temp(weather_data["main"]["temp"])
+                "description"].capitalize()
+            self.temp_text.value = self.display_temp(
+                weather_data["main"]["temp"])
             icon_file = weather_data["weather"][0]["icon"]
             self.weather_icon.src_base64 = None
             self.weather_icon.src = (
-                f"https://openweathermap.org/img/wn/{icon_file}@2x.png"
-            )
+                f"https://openweathermap.org/img/wn/{icon_file}@2x.png")
             self.update()
             time.sleep(60)
 
@@ -89,6 +91,7 @@ class Weather(ft.Container):
 
 class WeatherAsync(ft.Container):
     """ """
+
     def __init__(self, height=200, width=200, bgcolor=ft.colors.BLUE_200):
         super().__init__()
         self.OWM_Endpoint = "https://api.openweathermap.org/data/2.5/weather"
@@ -101,7 +104,8 @@ class WeatherAsync(ft.Container):
         self.description_text = ft.Text(style=ft.TextStyle(size=20))
         self.weather_icon = ft.Image(
             # empty image
-            src_base64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+            src_base64=
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
             height=100,
             width=100,
         )
@@ -141,21 +145,19 @@ class WeatherAsync(ft.Container):
     async def update_weather(self):
         while self.running:
             async with httpx.AsyncClient() as client:
-                response = await client.get(
-                    self.OWM_Endpoint, params=self.get_weather_params()
-                )
+                response = await client.get(self.OWM_Endpoint,
+                                            params=self.get_weather_params())
             response.raise_for_status()
             weather_data = response.json()
 
             self.description_text.value = weather_data["weather"][0][
-                "description"
-            ].capitalize()
-            self.temp_text.value = self.display_temp(weather_data["main"]["temp"])
+                "description"].capitalize()
+            self.temp_text.value = self.display_temp(
+                weather_data["main"]["temp"])
             icon_file = weather_data["weather"][0]["icon"]
             self.weather_icon.src_base64 = None
             self.weather_icon.src = (
-                f"https://openweathermap.org/img/wn/{icon_file}@2x.png"
-            )
+                f"https://openweathermap.org/img/wn/{icon_file}@2x.png")
             self.update()
             await asyncio.sleep(60)
 
