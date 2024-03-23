@@ -68,7 +68,7 @@ class DesktopAppLayout(Row):
     def select_page(self, page_number):
         """
 
-        :param page_number: 
+        :param page_number:
 
         """
         self.navigation_rail.selected_index = page_number
@@ -77,7 +77,7 @@ class DesktopAppLayout(Row):
     def _navigation_change(self, e):
         """
 
-        :param e: 
+        :param e:
 
         """
         self._change_displayed_page()
@@ -107,7 +107,7 @@ class DesktopAppLayout(Row):
     def handle_resize(self, e):
         """
 
-        :param e: 
+        :param e:
 
         """
         pass
@@ -165,8 +165,8 @@ class DesktopAppLayout(Row):
 def create_page(title: str, body: str):
     """
 
-    :param title: str: 
-    :param body: str: 
+    :param title: str:
+    :param body: str:
 
     """
     return Row(
@@ -187,7 +187,7 @@ def create_page(title: str, body: str):
 def main(page: Page):
     """
 
-    :param page: Page: 
+    :param page: Page:
 
     """
 

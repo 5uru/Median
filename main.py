@@ -7,7 +7,7 @@ from components.weather_widget import WeatherAsync
 def main(page: ft.Page):
     """
 
-    :param page: ft.Page: 
+    :param page: ft.Page:
 
     """
 
