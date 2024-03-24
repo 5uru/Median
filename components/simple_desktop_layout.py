@@ -1,7 +1,16 @@
 import flet
-from flet import (AppBar, Card, Column, Container, NavigationRail,
-                  NavigationRailDestination, Page, PopupMenuButton,
-                  PopupMenuItem, Row, Text, icons)
+from flet import AppBar
+from flet import Card
+from flet import Column
+from flet import Container
+from flet import icons
+from flet import NavigationRail
+from flet import NavigationRailDestination
+from flet import Page
+from flet import PopupMenuButton
+from flet import PopupMenuItem
+from flet import Row
+from flet import Text
 
 
 class DesktopAppLayout(Row):
