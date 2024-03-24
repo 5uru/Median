@@ -47,9 +47,7 @@ class ResponsiveMenuLayout(Row):
 
         self.expand = True
 
-        self.navigation_items = [
-            navigation_item for navigation_item, _ in pages
-        ]
+        self.navigation_items = [navigation_item for navigation_item, _ in pages]
         self.routes = [
             f"/{item.pop('route', None) or slugify(item['label'])}"
             for item in self.navigation_items
@@ -62,8 +60,7 @@ class ResponsiveMenuLayout(Row):
         page_contents = [page_content for _, page_content in pages]
 
         self.menu_panel = Row(
-            controls=[self.navigation_rail,
-                      VerticalDivider(width=1)],
+            controls=[self.navigation_rail, VerticalDivider(width=1)],
             spacing=0,
             tight=True,
         )
@@ -93,9 +90,9 @@ class ResponsiveMenuLayout(Row):
     @property
     def minimize_to_icons(self) -> bool:
         """ """
-        return self._minimize_to_icons or (self._landscape_minimize_to_icons
-                                           and
-                                           self._portrait_minimize_to_icons)
+        return self._minimize_to_icons or (
+            self._landscape_minimize_to_icons and self._portrait_minimize_to_icons
+        )
 
     @minimize_to_icons.setter
     def minimize_to_icons(self, value: bool):
@@ -151,9 +148,11 @@ class ResponsiveMenuLayout(Row):
         """
         self._menu_extended = value
 
-        dimension_minimized = (self.landscape_minimize_to_icons
-                               if self.is_landscape() else
-                               self.portrait_minimize_to_icons)
+        dimension_minimized = (
+            self.landscape_minimize_to_icons
+            if self.is_landscape()
+            else self.portrait_minimize_to_icons
+        )
         if not dimension_minimized or self._panel_visible:
             self.navigation_rail.extended = value
 
@@ -218,8 +217,7 @@ class ResponsiveMenuLayout(Row):
                 item.pop("label")
 
         self.navigation_rail.destinations = [
-            NavigationRailDestination(**nav_specs)
-            for nav_specs in navigation_items
+            NavigationRailDestination(**nav_specs) for nav_specs in navigation_items
         ]
         self.navigation_rail.label_type = "none" if icons_only else "all"
 
@@ -287,16 +285,13 @@ class ResponsiveMenuLayout(Row):
                 )
                 self.controls = [
                     Stack(
-                        controls=[
-                            self.content_area, dismiss_shield, self.menu_panel
-                        ],
+                        controls=[self.content_area, dismiss_shield, self.menu_panel],
                         expand=True,
                     )
                 ]
             else:
                 self.controls = [
-                    Stack(controls=[self.content_area, self.menu_panel],
-                          expand=True)
+                    Stack(controls=[self.content_area, self.menu_panel], expand=True)
                 ]
             self.update_destinations()
             self.navigation_rail.extended = self.menu_extended
@@ -437,20 +432,21 @@ if __name__ == "__main__":
         menu_layout = ResponsiveMenuLayout(page, pages)
 
         page.appbar.actions = [
-            Row([
-                Text("Minimize\nto icons"),
-                Switch(on_change=lambda e: toggle_icons_only(menu_layout)),
-                Text("Menu\nwidth"),
-                Switch(value=True,
-                       on_change=lambda e: toggle_menu_width(menu_layout)),
-            ])
+            Row(
+                [
+                    Text("Minimize\nto icons"),
+                    Switch(on_change=lambda e: toggle_icons_only(menu_layout)),
+                    Text("Menu\nwidth"),
+                    Switch(
+                        value=True, on_change=lambda e: toggle_menu_width(menu_layout)
+                    ),
+                ]
+            )
         ]
 
         menu_layout.navigation_rail.leading = ElevatedButton(
-            "Add",
-            icon=icons.ADD,
-            expand=True,
-            on_click=lambda e: print("Add clicked"))
+            "Add", icon=icons.ADD, expand=True, on_click=lambda e: print("Add clicked")
+        )
 
         page.add(menu_layout)
 
@@ -468,8 +464,7 @@ if __name__ == "__main__":
                 Column(
                     horizontal_alignment="stretch",
                     controls=[
-                        Card(content=Container(Text(title, weight="bold"),
-                                               padding=8)),
+                        Card(content=Container(Text(title, weight="bold"), padding=8)),
                         Text(body),
                     ],
                     expand=True,

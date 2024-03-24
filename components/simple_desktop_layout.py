@@ -17,13 +17,13 @@ class DesktopAppLayout(Row):
     """A desktop app layout with a menu on the left."""
 
     def __init__(
-            self,
-            title,
-            page,
-            pages,
-            *args,
-            window_size=(800, 600),
-            **kwargs,
+        self,
+        title,
+        page,
+        pages,
+        *args,
+        window_size=(800, 600),
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
 
@@ -32,9 +32,7 @@ class DesktopAppLayout(Row):
 
         self.expand = True
 
-        self.navigation_items = [
-            navigation_item for navigation_item, _ in pages
-        ]
+        self.navigation_items = [navigation_item for navigation_item, _ in pages]
         self.navigation_rail = self.build_navigation_rail()
         self.update_destinations()
         self._menu_extended = True
@@ -143,21 +141,23 @@ class DesktopAppLayout(Row):
         )
 
         appbar.actions = [
-            Row([
-                PopupMenuButton(
-                    icon=icons.HELP,
-                    items=[
-                        PopupMenuItem(
-                            icon=icons.CONTACT_SUPPORT,
-                            text="Ask a question",
-                        ),
-                        PopupMenuItem(
-                            icon=icons.BUG_REPORT,
-                            text="Report a bug",
-                        ),
-                    ],
-                )
-            ])
+            Row(
+                [
+                    PopupMenuButton(
+                        icon=icons.HELP,
+                        items=[
+                            PopupMenuItem(
+                                icon=icons.CONTACT_SUPPORT,
+                                text="Ask a question",
+                            ),
+                            PopupMenuItem(
+                                icon=icons.BUG_REPORT,
+                                text="Report a bug",
+                            ),
+                        ],
+                    )
+                ]
+            )
         ]
         return appbar
 
@@ -174,8 +174,7 @@ def create_page(title: str, body: str):
             Column(
                 horizontal_alignment="stretch",
                 controls=[
-                    Card(content=Container(Text(title, weight="bold"),
-                                           padding=8)),
+                    Card(content=Container(Text(title, weight="bold"), padding=8)),
                     Text(body),
                 ],
                 expand=True,
@@ -239,4 +238,6 @@ def main(page: Page):
 
 
 if __name__ == "__main__":
-    flet.app(target=main, )
+    flet.app(
+        target=main,
+    )
