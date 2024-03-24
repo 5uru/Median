@@ -1,31 +1,29 @@
 import flet
-from flet import (
-    AppBar,
-    Column,
-    Row,
-    Container,
-    NavigationRail,
-    NavigationRailDestination,
-    Page,
-    Text,
-    Card,
-    PopupMenuButton,
-    PopupMenuItem,
-)
+from flet import AppBar
+from flet import Card
+from flet import Column
+from flet import Container
 from flet import icons
+from flet import NavigationRail
+from flet import NavigationRailDestination
+from flet import Page
+from flet import PopupMenuButton
+from flet import PopupMenuItem
+from flet import Row
+from flet import Text
 
 
 class DesktopAppLayout(Row):
     """A desktop app layout with a menu on the left."""
 
     def __init__(
-        self,
-        title,
-        page,
-        pages,
-        *args,
-        window_size=(800, 600),
-        **kwargs,
+            self,
+            title,
+            page,
+            pages,
+            *args,
+            window_size=(800, 600),
+            **kwargs,
     ):
         super().__init__(*args, **kwargs)
 
@@ -34,7 +32,9 @@ class DesktopAppLayout(Row):
 
         self.expand = True
 
-        self.navigation_items = [navigation_item for navigation_item, _ in pages]
+        self.navigation_items = [
+            navigation_item for navigation_item, _ in pages
+        ]
         self.navigation_rail = self.build_navigation_rail()
         self.update_destinations()
         self._menu_extended = True
@@ -68,20 +68,32 @@ class DesktopAppLayout(Row):
         self.page.title = title
 
     def select_page(self, page_number):
+        """
+
+        :param page_number:
+
+        """
         self.navigation_rail.selected_index = page_number
         self._change_displayed_page()
 
     def _navigation_change(self, e):
+        """
+
+        :param e:
+
+        """
         self._change_displayed_page()
         self.page.update()
 
     def _change_displayed_page(self):
+        """ """
         page_number = self.navigation_rail.selected_index
         for i, content_page in enumerate(self.content_area.controls):
             # update selected page
             content_page.visible = page_number == i
 
     def build_navigation_rail(self):
+        """ """
         return NavigationRail(
             selected_index=0,
             label_type="none",
@@ -90,28 +102,38 @@ class DesktopAppLayout(Row):
         )
 
     def update_destinations(self):
+        """ """
         self.navigation_rail.destinations = self.navigation_items
         self.navigation_rail.label_type = "all"
 
     def handle_resize(self, e):
+        """
+
+        :param e:
+
+        """
         pass
 
     def set_content(self):
+        """ """
         self.controls = [self.menu_panel, self.content_area]
         self.update_destinations()
         self.navigation_rail.extended = self._menu_extended
         self.menu_panel.visible = self._panel_visible
 
     def is_portrait(self) -> bool:
+        """ """
         # Return true if window/display is narrow
         # return self.page.window_height >= self.page.window_width
         return self.page.height >= self.page.width
 
     def is_landscape(self) -> bool:
+        """ """
         # Return true if window/display is wide
         return self.page.width > self.page.height
 
     def create_appbar(self) -> AppBar:
+        """ """
         appbar = AppBar(
             # leading=menu_button,
             # leading_width=40,
@@ -121,34 +143,39 @@ class DesktopAppLayout(Row):
         )
 
         appbar.actions = [
-            Row(
-                [
-                    PopupMenuButton(
-                        icon=icons.HELP,
-                        items=[
-                            PopupMenuItem(
-                                icon=icons.CONTACT_SUPPORT,
-                                text="Ask a question",
-                            ),
-                            PopupMenuItem(
-                                icon=icons.BUG_REPORT,
-                                text="Report a bug",
-                            ),
-                        ],
-                    )
-                ]
-            )
+            Row([
+                PopupMenuButton(
+                    icon=icons.HELP,
+                    items=[
+                        PopupMenuItem(
+                            icon=icons.CONTACT_SUPPORT,
+                            text="Ask a question",
+                        ),
+                        PopupMenuItem(
+                            icon=icons.BUG_REPORT,
+                            text="Report a bug",
+                        ),
+                    ],
+                )
+            ])
         ]
         return appbar
 
 
 def create_page(title: str, body: str):
+    """
+
+    :param title: str:
+    :param body: str:
+
+    """
     return Row(
         controls=[
             Column(
                 horizontal_alignment="stretch",
                 controls=[
-                    Card(content=Container(Text(title, weight="bold"), padding=8)),
+                    Card(content=Container(Text(title, weight="bold"),
+                                           padding=8)),
                     Text(body),
                 ],
                 expand=True,
@@ -159,6 +186,11 @@ def create_page(title: str, body: str):
 
 
 def main(page: Page):
+    """
+
+    :param page: Page:
+
+    """
 
     pages = [
         (
@@ -207,6 +239,4 @@ def main(page: Page):
 
 
 if __name__ == "__main__":
-    flet.app(
-        target=main,
-    )
+    flet.app(target=main, )
