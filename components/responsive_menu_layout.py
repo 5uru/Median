@@ -3,10 +3,12 @@ from copy import deepcopy
 import flet
 from flet import AppBar
 from flet import Card
+from flet import colors
 from flet import Column
 from flet import Container
 from flet import ElevatedButton
 from flet import IconButton
+from flet import icons
 from flet import NavigationRail
 from flet import NavigationRailDestination
 from flet import Page
@@ -15,12 +17,12 @@ from flet import Stack
 from flet import Switch
 from flet import Text
 from flet import VerticalDivider
-from flet import colors
-from flet import icons
 from flet.utils import slugify
 
 
 class ResponsiveMenuLayout(Row):
+    """ """
+
     def __init__(
         self,
         page,
@@ -45,7 +47,9 @@ class ResponsiveMenuLayout(Row):
 
         self.expand = True
 
-        self.navigation_items = [navigation_item for navigation_item, _ in pages]
+        self.navigation_items = [
+            navigation_item for navigation_item, _ in pages
+        ]
         self.routes = [
             f"/{item.pop('route', None) or slugify(item['label'])}"
             for item in self.navigation_items
@@ -58,7 +62,8 @@ class ResponsiveMenuLayout(Row):
         page_contents = [page_content for _, page_content in pages]
 
         self.menu_panel = Row(
-            controls=[self.navigation_rail, VerticalDivider(width=1)],
+            controls=[self.navigation_rail,
+                      VerticalDivider(width=1)],
             spacing=0,
             tight=True,
         )
@@ -77,60 +82,93 @@ class ResponsiveMenuLayout(Row):
         self.page.on_resize = self.handle_resize
 
     def select_page(self, page_number):
+        """
+
+        :param page_number:
+
+        """
         self.navigation_rail.selected_index = page_number
         self._change_displayed_page()
 
     @property
     def minimize_to_icons(self) -> bool:
-        return self._minimize_to_icons or (
-            self._landscape_minimize_to_icons and self._portrait_minimize_to_icons
-        )
+        """ """
+        return self._minimize_to_icons or (self._landscape_minimize_to_icons
+                                           and
+                                           self._portrait_minimize_to_icons)
 
     @minimize_to_icons.setter
     def minimize_to_icons(self, value: bool):
+        """
+
+        :param value: bool:
+
+        """
         self._minimize_to_icons = value
         self.set_navigation_content()
 
     @property
     def landscape_minimize_to_icons(self) -> bool:
+        """ """
         return self._landscape_minimize_to_icons or self._minimize_to_icons
 
     @landscape_minimize_to_icons.setter
     def landscape_minimize_to_icons(self, value: bool):
+        """
+
+        :param value: bool:
+
+        """
         self._landscape_minimize_to_icons = value
         self.set_navigation_content()
 
     @property
     def portrait_minimize_to_icons(self) -> bool:
+        """ """
         return self._portrait_minimize_to_icons or self._minimize_to_icons
 
     @portrait_minimize_to_icons.setter
     def portrait_minimize_to_icons(self, value: bool):
+        """
+
+        :param value: bool:
+
+        """
         self._portrait_minimize_to_icons = value
         self.set_navigation_content()
 
     @property
     def menu_extended(self) -> bool:
+        """ """
         return self._menu_extended
 
     @menu_extended.setter
     def menu_extended(self, value: bool):
+        """
+
+        :param value: bool:
+
+        """
         self._menu_extended = value
 
-        dimension_minimized = (
-            self.landscape_minimize_to_icons
-            if self.is_landscape()
-            else self.portrait_minimize_to_icons
-        )
+        dimension_minimized = (self.landscape_minimize_to_icons
+                               if self.is_landscape() else
+                               self.portrait_minimize_to_icons)
         if not dimension_minimized or self._panel_visible:
             self.navigation_rail.extended = value
 
     def _navigation_change(self, e):
+        """
+
+        :param e:
+
+        """
         self._change_displayed_page()
         self.check_toggle_on_select()
         self.page.update()
 
     def _change_displayed_page(self):
+        """ """
         page_number = self.navigation_rail.selected_index
         if self._support_routes:
             self.page.route = self.routes[page_number]
@@ -138,6 +176,11 @@ class ResponsiveMenuLayout(Row):
             content_page.visible = page_number == i
 
     def _route_change(self, route):
+        """
+
+        :param route:
+
+        """
         try:
             page_number = self.routes.index(route)
         except ValueError:
@@ -146,10 +189,16 @@ class ResponsiveMenuLayout(Row):
         self.select_page(page_number)
 
     def _on_route_change(self, event):
+        """
+
+        :param event:
+
+        """
         self._route_change(event.route)
         self.page.update()
 
     def build_navigation_rail(self):
+        """ """
         return NavigationRail(
             selected_index=0,
             label_type="none",
@@ -157,6 +206,11 @@ class ResponsiveMenuLayout(Row):
         )
 
     def update_destinations(self, icons_only=False):
+        """
+
+        :param icons_only:  (Default value = False)
+
+        """
         navigation_items = self.navigation_items
         if icons_only:
             navigation_items = deepcopy(navigation_items)
@@ -164,11 +218,17 @@ class ResponsiveMenuLayout(Row):
                 item.pop("label")
 
         self.navigation_rail.destinations = [
-            NavigationRailDestination(**nav_specs) for nav_specs in navigation_items
+            NavigationRailDestination(**nav_specs)
+            for nav_specs in navigation_items
         ]
         self.navigation_rail.label_type = "none" if icons_only else "all"
 
     def handle_resize(self, e):
+        """
+
+        :param e:
+
+        """
         if self._was_portrait != self.is_portrait():
             self._was_portrait = self.is_portrait()
             self._panel_visible = self.is_landscape()
@@ -176,21 +236,29 @@ class ResponsiveMenuLayout(Row):
             self.page.update()
 
     def toggle_navigation(self, event=None):
+        """
+
+        :param event:  (Default value = None)
+
+        """
         self._panel_visible = not self._panel_visible
         self.set_navigation_content()
         self.page.update()
 
     def check_toggle_on_select(self):
+        """ """
         if self.is_portrait() and self._panel_visible:
             self.toggle_navigation()
 
     def set_navigation_content(self):
+        """ """
         if self.is_landscape():
             self.add_landscape_content()
         else:
             self.add_portrait_content()
 
     def add_landscape_content(self):
+        """ """
         self.controls = [self.menu_panel, self.content_area]
         if self.landscape_minimize_to_icons:
             self.update_destinations(icons_only=not self._panel_visible)
@@ -205,6 +273,7 @@ class ResponsiveMenuLayout(Row):
             self.menu_panel.visible = self._panel_visible
 
     def add_portrait_content(self):
+        """ """
         if self.portrait_minimize_to_icons and not self._panel_visible:
             self.controls = [self.menu_panel, self.content_area]
             self.update_destinations(icons_only=True)
@@ -218,24 +287,29 @@ class ResponsiveMenuLayout(Row):
                 )
                 self.controls = [
                     Stack(
-                        controls=[self.content_area, dismiss_shield, self.menu_panel],
+                        controls=[
+                            self.content_area, dismiss_shield, self.menu_panel
+                        ],
                         expand=True,
                     )
                 ]
             else:
                 self.controls = [
-                    Stack(controls=[self.content_area, self.menu_panel], expand=True)
+                    Stack(controls=[self.content_area, self.menu_panel],
+                          expand=True)
                 ]
             self.update_destinations()
             self.navigation_rail.extended = self.menu_extended
             self.menu_panel.visible = self._panel_visible
 
     def is_portrait(self) -> bool:
+        """ """
         # Return true if window/display is narrow
         # return self.page.window_height >= self.page.window_width
         return self.page.height >= self.page.width
 
     def is_landscape(self) -> bool:
+        """ """
         # Return true if window/display is wide
         return self.page.width > self.page.height
 
@@ -243,6 +317,12 @@ class ResponsiveMenuLayout(Row):
 if __name__ == "__main__":
 
     def main(page: Page, title="Basic Responsive Menu"):
+        """
+
+        :param page: Page:
+        :param title:  (Default value = "Basic Responsive Menu")
+
+        """
 
         page.title = title
 
@@ -357,33 +437,39 @@ if __name__ == "__main__":
         menu_layout = ResponsiveMenuLayout(page, pages)
 
         page.appbar.actions = [
-            Row(
-                [
-                    Text("Minimize\nto icons"),
-                    Switch(on_change=lambda e: toggle_icons_only(menu_layout)),
-                    Text("Menu\nwidth"),
-                    Switch(
-                        value=True, on_change=lambda e: toggle_menu_width(menu_layout)
-                    ),
-                ]
-            )
+            Row([
+                Text("Minimize\nto icons"),
+                Switch(on_change=lambda e: toggle_icons_only(menu_layout)),
+                Text("Menu\nwidth"),
+                Switch(value=True,
+                       on_change=lambda e: toggle_menu_width(menu_layout)),
+            ])
         ]
 
         menu_layout.navigation_rail.leading = ElevatedButton(
-            "Add", icon=icons.ADD, expand=True, on_click=lambda e: print("Add clicked")
-        )
+            "Add",
+            icon=icons.ADD,
+            expand=True,
+            on_click=lambda e: print("Add clicked"))
 
         page.add(menu_layout)
 
         menu_button.on_click = lambda e: menu_layout.toggle_navigation()
 
     def create_page(title: str, body: str):
+        """
+
+        :param title: str:
+        :param body: str:
+
+        """
         return Row(
             controls=[
                 Column(
                     horizontal_alignment="stretch",
                     controls=[
-                        Card(content=Container(Text(title, weight="bold"), padding=8)),
+                        Card(content=Container(Text(title, weight="bold"),
+                                               padding=8)),
                         Text(body),
                     ],
                     expand=True,
@@ -393,10 +479,20 @@ if __name__ == "__main__":
         )
 
     def toggle_icons_only(menu: ResponsiveMenuLayout):
+        """
+
+        :param menu: ResponsiveMenuLayout:
+
+        """
         menu.minimize_to_icons = not menu.minimize_to_icons
         menu.page.update()
 
     def toggle_menu_width(menu: ResponsiveMenuLayout):
+        """
+
+        :param menu: ResponsiveMenuLayout:
+
+        """
         menu.menu_extended = not menu.menu_extended
         menu.page.update()
 
