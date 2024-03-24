@@ -81,7 +81,7 @@ class Weather(ft.Container):
     def display_temp(self, temp):
         """
 
-        :param temp:
+        :param temp: 
 
         """
         c_temp = round(temp - 273.15)
@@ -164,7 +164,7 @@ class WeatherAsync(ft.Container):
     def display_temp(self, temp):
         """
 
-        :param temp:
+        :param temp: 
 
         """
         c_temp = round(temp - 273.15)

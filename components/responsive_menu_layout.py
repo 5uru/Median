@@ -68,7 +68,7 @@ class ResponsiveMenuLayout(Row):
     def select_page(self, page_number):
         """
 
-        :param page_number:
+        :param page_number: 
 
         """
         self.navigation_rail.selected_index = page_number
@@ -86,6 +86,7 @@ class ResponsiveMenuLayout(Row):
         """
 
         :param value: bool:
+        :param value: bool: 
 
         """
         self._minimize_to_icons = value
@@ -101,6 +102,7 @@ class ResponsiveMenuLayout(Row):
         """
 
         :param value: bool:
+        :param value: bool: 
 
         """
         self._landscape_minimize_to_icons = value
@@ -116,6 +118,7 @@ class ResponsiveMenuLayout(Row):
         """
 
         :param value: bool:
+        :param value: bool: 
 
         """
         self._portrait_minimize_to_icons = value
@@ -131,6 +134,7 @@ class ResponsiveMenuLayout(Row):
         """
 
         :param value: bool:
+        :param value: bool: 
 
         """
         self._menu_extended = value
@@ -146,7 +150,7 @@ class ResponsiveMenuLayout(Row):
     def _navigation_change(self, e):
         """
 
-        :param e:
+        :param e: 
 
         """
         self._change_displayed_page()
@@ -164,7 +168,7 @@ class ResponsiveMenuLayout(Row):
     def _route_change(self, route):
         """
 
-        :param route:
+        :param route: 
 
         """
         try:
@@ -177,7 +181,7 @@ class ResponsiveMenuLayout(Row):
     def _on_route_change(self, event):
         """
 
-        :param event:
+        :param event: 
 
         """
         self._route_change(event.route)
@@ -194,7 +198,7 @@ class ResponsiveMenuLayout(Row):
     def update_destinations(self, icons_only=False):
         """
 
-        :param icons_only:  (Default value = False)
+        :param icons_only: Default value = False)
 
         """
         navigation_items = self.navigation_items
@@ -211,7 +215,7 @@ class ResponsiveMenuLayout(Row):
     def handle_resize(self, e):
         """
 
-        :param e:
+        :param e: 
 
         """
         if self._was_portrait != self.is_portrait():
@@ -223,7 +227,7 @@ class ResponsiveMenuLayout(Row):
     def toggle_navigation(self, event=None):
         """
 
-        :param event:  (Default value = None)
+        :param event: Default value = None)
 
         """
         self._panel_visible = not self._panel_visible
@@ -302,7 +306,8 @@ if __name__ == "__main__":
         """
 
         :param page: Page:
-        :param title:  (Default value = "Basic Responsive Menu")
+        :param title: Default value = "Basic Responsive Menu")
+        :param page: Page: 
 
         """
 
@@ -444,6 +449,8 @@ if __name__ == "__main__":
 
         :param title: str:
         :param body: str:
+        :param title: str: 
+        :param body: str: 
 
         """
         return Row(
@@ -464,6 +471,7 @@ if __name__ == "__main__":
         """
 
         :param menu: ResponsiveMenuLayout:
+        :param menu: ResponsiveMenuLayout: 
 
         """
         menu.minimize_to_icons = not menu.minimize_to_icons
@@ -473,6 +481,7 @@ if __name__ == "__main__":
         """
 
         :param menu: ResponsiveMenuLayout:
+        :param menu: ResponsiveMenuLayout: 
 
         """
         menu.menu_extended = not menu.menu_extended
