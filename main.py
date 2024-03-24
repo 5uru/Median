@@ -1,7 +1,6 @@
 import flet as ft
 
-from components.weather_widget import Weather
-from components.weather_widget import WeatherAsync
+from components.weather_widget import Weather, WeatherAsync
 
 
 def main(page: ft.Page):
