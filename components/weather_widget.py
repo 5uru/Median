@@ -23,8 +23,7 @@ class Weather(ft.Container):
         self.description_text = ft.Text(style=ft.TextStyle(size=20))
         self.weather_icon = ft.Image(
             # empty image
-            src_base64=
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+            src_base64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
             height=100,
             width=100,
         )
@@ -104,8 +103,7 @@ class WeatherAsync(ft.Container):
         self.description_text = ft.Text(style=ft.TextStyle(size=20))
         self.weather_icon = ft.Image(
             # empty image
-            src_base64=
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+            src_base64="iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
             height=100,
             width=100,
         )
