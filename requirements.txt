@@ -13,5 +13,5 @@ sentencepiece==0.2.0
 
 
 streamlit==1.32.2
-pypdf2==2.10.5
+pypdf2==3.0.1
 python-docx ==1.1.0
