@@ -1,7 +1,7 @@
 jsonschema == 4.21.1
 langchain==0.1.13
 langdetect==1.0.9
-mlx-lm==0.4.0
+mlx-lm==0.5.0
 pydantic==2.6.4
 spacy==3.7.4
 transformers==4.39.0
@@ -12,4 +12,6 @@ torchaudio==2.2.1
 sentencepiece==0.2.0
 
 
-flet==0.21.2
+streamlit==1.32.2
+pypdf2==2.10.5
+python-docx ==1.1.0
