@@ -5,7 +5,7 @@ from docx import Document
 def read_docx(docx_file):
     """
 
-    :param docx_file:
+    :param docx_file: 
 
     """
     # Create a Document object
@@ -18,7 +18,7 @@ def read_docx(docx_file):
 def read_pdf(pdf_path):
     """
 
-    :param pdf_path:
+    :param pdf_path: 
 
     """
     # Read the PDF file
@@ -34,8 +34,8 @@ def read_pdf(pdf_path):
 def main(file, file_type):
     """
 
-    :param file:
-    :param file_type:
+    :param file: param file_type:
+    :param file_type: 
 
     """
     if file_type == "text/markdown":
