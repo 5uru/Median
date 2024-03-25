@@ -42,9 +42,10 @@ def main(file, file_type):
         return file.read().decode()
     elif file_type == "application/pdf":
         return read_pdf(file)
-    elif (file_type ==
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          ):
+    elif (
+        file_type
+        == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ):
         return read_docx(file)
     elif file_type == "text/plain":
         return file.read().decode()
