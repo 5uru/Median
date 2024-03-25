@@ -34,7 +34,7 @@ def read_pdf(pdf_path):
 def main(file, file_type):
     """
 
-    :param file:
+    :param file: param file_type:
     :param file_type:
 
     """
