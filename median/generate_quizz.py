@@ -1,7 +1,7 @@
 from langchain.docstore.document import Document as LangchainDocument
 
 from median.llm_provider import generation
-from median.utils import get_topics, language_detection, median_logger, split_documents
+from median.utils import get_topics , language_detection , median_logger , split_documents
 from median.validator import validate_json_data
 
 
@@ -34,7 +34,9 @@ def quiz(content):
                 doc_quiz = generation(doc, lang, " ,".join(topics))
                 median_logger.info(f"Generated quiz: {doc_quiz}")
                 try:
-                    validation, json_object, error_message = validate_json_data(doc_quiz)
+                    validation, json_object, error_message = validate_json_data(
+                        doc_quiz
+                    )
                     if validation:
                         all_quiz.append(json_object)
                         median_logger.info(f"Quiz generated: {json_object}")

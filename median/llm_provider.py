@@ -1,7 +1,8 @@
-from mlx_lm import generate, load
+import os
+
+from mlx_lm import generate , load
 
 from median.utils import median_logger
-import os
 
 
 def run_inference(prompt):
@@ -12,7 +13,7 @@ def run_inference(prompt):
         "max_tokens": 1500,
         "repetition_penalty": 1.1,
     }
-    model_name = "jonathansuru/dolphin-2.1-mistral-7b-8bit"
+    model_name = "mlx-community/Mistral-7B-Instruct-v0.2-4bit"
     model, tokenizer = load(model_name, lazy=True)
     median_logger.info("Loaded model and tokenizer")
     return generate(model, tokenizer, prompt=prompt, **config)
