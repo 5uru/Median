@@ -22,11 +22,11 @@ def read_pdf(pdf_path):
 
     """
     # Read the PDF file
-    pdf_reader = PyPDF2.PdfFileReader(pdf_path)
+    pdf_reader = PyPDF2.PdfReader(pdf_path)
     # Extract the content
     content = ""
-    for page in range(pdf_reader.getNumPages()):
-        content += pdf_reader.getPage(page).extractText()
+    for page in range(len(pdf_reader.pages)):
+        content += pdf_reader.pages[page].extract_text()
 
     return content
 
@@ -42,9 +42,10 @@ def main(file, file_type):
         return file.read().decode()
     elif file_type == "application/pdf":
         return read_pdf(file)
-    elif (file_type ==
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          ):
+    elif (
+        file_type
+        == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ):
         return read_docx(file)
     elif file_type == "text/plain":
         return file.read().decode()

@@ -1,7 +1,7 @@
 from langchain.docstore.document import Document as LangchainDocument
 
 from median.llm_provider import generation
-from median.utils import get_topics, language_detection, median_logger, split_documents
+from median.utils import get_topics , language_detection , median_logger , split_documents
 from median.validator import validate_json_data
 
 
@@ -12,7 +12,7 @@ def quiz(content):
     median_logger.info(f"Key phrases: {topics}")
     corpus = [LangchainDocument(page_content=content.replace("\n\n", " "))]
 
-    content_split = split_documents(1500, corpus)
+    content_split = split_documents(4000, corpus)
 
     content_split = [doc.page_content for doc in content_split]
 
@@ -34,7 +34,9 @@ def quiz(content):
                 doc_quiz = generation(doc, lang, " ,".join(topics))
                 median_logger.info(f"Generated quiz: {doc_quiz}")
                 try:
-                    validation, json_object, error_message = validate_json_data(doc_quiz)
+                    validation, json_object, error_message = validate_json_data(
+                        doc_quiz
+                    )
                     if validation:
                         all_quiz.append(json_object)
                         median_logger.info(f"Quiz generated: {json_object}")
@@ -42,4 +44,8 @@ def quiz(content):
                 except Exception as e:
                     median_logger.error(f"Error: {e}")
                     continue
-    return all_quiz, topics
+    quiz_list = []
+    for quiz_content in all_quiz:
+        for question in quiz_content["collection"]:
+            quiz_list.append(question)
+    return quiz_list, topics
