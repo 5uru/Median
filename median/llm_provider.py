@@ -10,7 +10,7 @@ def run_inference(prompt):
     config = {
         "verbose": True,
         "temp": 0.8,
-        "max_tokens": 1500,
+        "max_tokens": 4000,
         "repetition_penalty": 1.1,
     }
     model_name = "mlx-community/Mistral-7B-Instruct-v0.2-4bit"
