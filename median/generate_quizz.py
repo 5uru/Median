@@ -12,7 +12,7 @@ def quiz(content):
     median_logger.info(f"Key phrases: {topics}")
     corpus = [LangchainDocument(page_content=content.replace("\n\n", " "))]
 
-    content_split = split_documents(1500, corpus)
+    content_split = split_documents(4000, corpus)
 
     content_split = [doc.page_content for doc in content_split]
 
@@ -44,4 +44,8 @@ def quiz(content):
                 except Exception as e:
                     median_logger.error(f"Error: {e}")
                     continue
-    return all_quiz, topics
+    quiz_list = []
+    for quiz_content in all_quiz:
+        for question in quiz_content["collection"]:
+            quiz_list.append(question)
+    return quiz_list, topics
