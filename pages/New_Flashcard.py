@@ -1,3 +1,7 @@
+import os
+import pickle
+import tempfile
+
 import streamlit as st
 
 from median.file_reader import main as read_file
@@ -10,16 +14,54 @@ st.set_page_config(
 )
 
 
-@st.cache(allow_output_mutation=True)
-def get_flashcards():
-    # Initialize an empty list for flashcards
-    flashcards = []
-    return flashcards
+def save_flashcard_data(flashcard_data):
+    # Create a temporary file
+    temp_file = tempfile.NamedTemporaryFile(delete=False)
+
+    # Use pickle to serialize the flashcard_data
+    with open(temp_file.name, "wb") as f:
+        pickle.dump(flashcard_data, f)
+
+    return temp_file.name
 
 
-def add_flashcard(flashcards, question, answer):
-    # Add a new flashcard to the list
-    flashcards.append({"question": question, "answer": answer})
+def load_flashcard_data(temp_file_name):
+    # Check if the file exists
+    if not os.path.exists(temp_file_name):
+        # If not, create it and write an empty list to it
+        with open(temp_file_name, "wb") as f:
+            pickle.dump([], f)
+
+    # Load the flashcard_data from the temporary file
+    with open(temp_file_name, "rb") as f:
+        flashcard_data = pickle.load(f)
+
+    return flashcard_data
+
+
+def modify_flashcard_data(temp_file_name, new_flashcard):
+    # Load the existing flashcard_data
+    flashcard_data = load_flashcard_data(temp_file_name)
+
+    # Modify the flashcard_data
+    flashcard_data.append(new_flashcard)
+
+    # Save the modified flashcard_data
+    save_flashcard_data(flashcard_data)
+
+
+def add_flashcard_data(temp_file_name, question, answer):
+    # Load the existing flashcard_data
+    flashcard_data = load_flashcard_data(temp_file_name)
+
+    # Create new flashcard
+    new_flashcard = {"question": question, "answer": answer}
+
+    # Add the new flashcard to flashcard_data
+    flashcard_data.append(new_flashcard)
+
+    # Save the modified flashcard_data
+    save_flashcard_data(flashcard_data)
 
 
 st.title("Create New Flashcard")
@@ -58,20 +100,15 @@ if quiz_collection and topics:
 
     # Display the HTML content in Streamlit
     st.markdown(html_content, unsafe_allow_html=True)
-    # Get the cached list of flashcards
-    flashcard_data = get_flashcards()
 
     for q in quiz_collection:
-        # add pn flashcard_data
-        add_flashcard(flashcard_data, q["question"], q["answer"])
-        with st.form(f"{q['question']}"):
-            st.write(f"Question: {q['question']}")
-            st.write(f"Answer: {q['answer']}")
-            # Every form must have a submit button.
-            submitted = st.form_submit_button("Delete")
-            if submitted:
-                flashcard_data.remove(q)
-                st.success("Flashcard deleted")
-                st.rerun()
+        # add on flashcard_data
+        add_flashcard_data("temp.txt", q["question"], q["answer"])
 
-    st.write(flashcard_data)
+
+# Load the flashcard_data from the temporary file
+flashcard_data = load_flashcard_data("temp.txt")
+
+# Print the flashcard_data
+for flashcard in flashcard_data:
+    print(flashcard)

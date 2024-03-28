@@ -4,7 +4,7 @@ import re
 from typing import List
 
 from jsonschema import validate
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel , ValidationError
 
 from median.utils import median_logger
 
@@ -89,7 +89,7 @@ def validate_json_data(json_object):
                     median_logger.info(f"Validation successful for item {index + 1}")
                 except ValidationError as e:
                     error_message = f"""Validation failed for item {
-                        index + 1
+                    index + 1
                     }: {e}"""
                     median_logger.error(error_message)
                     break
