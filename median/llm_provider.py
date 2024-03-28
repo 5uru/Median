@@ -1,25 +1,55 @@
 import os
 
-from mlx_lm import generate , load
+from mlx_lm import generate, load
 
 from median.utils import median_logger
 
 
-def run_inference(prompt):
+def load_model():
+    """
+    Load the model and tokenizer.
+
+    :return: The loaded model and tokenizer.
+    """
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
-    config = {
-        "verbose": True,
-        "temp": 0.8,
-        "max_tokens": 4000,
-        "repetition_penalty": 1.1,
-    }
+
     model_name = "mlx-community/Mistral-7B-Instruct-v0.2-4bit"
-    model, tokenizer = load(model_name, lazy=True)
+    model, tokenizer = load(model_name, lazy=False)
     median_logger.info("Loaded model and tokenizer")
-    return generate(model, tokenizer, prompt=prompt, **config)
+    return model, tokenizer
+
+
+def run_inference(model, tokenizer, prompt, model_config):
+    """
+    Run inference on the given prompt using the provided model, tokenizer, and configuration.
+
+    :param model: The loaded model.
+    :param tokenizer: The tokenizer.
+    :param prompt: The prompt to generate the output.
+    :param model_config: The model configuration.
+    :return: The generated output.
+    """
+    return generate(model, tokenizer, prompt=prompt, **model_config)
 
 
 def generation(content, language, followings):
+    """
+    Generate a quiz based on the given content, language, and followings.
+
+    :param content: The content to generate the quiz from.
+    :param language: The language of the quiz.
+    :param followings: The themes to prioritize in the quiz.
+    :return: The generated quiz as a string.
+    """
+    model, tokenizer = load_model()
+
+    model_config = {
+        "verbose": True,
+        "temp": 0.7,
+        "max_tokens": 4000,
+        "repetition_penalty": 1.1,
+    }
+
     prompt = f"""
      <BOS_TOKEN> <|START_OF_TURN_TOKEN|>
 <|SYSTEM_TOKEN|> # Safety Preamble
@@ -67,4 +97,4 @@ Generate the output in the specified format, basing the output strictly on the p
 <|END_OF_TURN_TOKEN|>
      """
     median_logger.info(f"Generating quiz for: {content} ")
-    return run_inference(prompt)
+    return run_inference(model, tokenizer, prompt, model_config)
