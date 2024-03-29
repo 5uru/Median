@@ -4,17 +4,25 @@ import re
 from typing import List
 
 from jsonschema import validate
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel , ValidationError
 
 from median.utils import median_logger
 
 
 class Quiz(BaseModel):
+    """
+    A data model class representing a quiz with a question and an answer.
+    """
+
     question: str
     answer: str
 
 
 class QuizCollection(BaseModel):
+    """
+    A data model class representing a collection of quizzes, where each quiz consists of a question and an answer.
+    """
+
     collection: List[Quiz]
 
 
@@ -25,6 +33,16 @@ median_logger.info(f"JSON schema: {json_schema}")
 
 
 def extract_json_from_markdown(text):
+    """
+    Extracts JSON-like dictionaries from a given text using regular expressions.
+
+    Args:
+        text (str): The text to extract JSON-like dictionaries from.
+
+    Returns:
+        List[dict]: A list of extracted dictionaries from the text.
+    """
+
     # Regular expression pattern to match simple dictionary-like structures
     dict_pattern = r"\{[^\{\}]*\}"
 
@@ -48,6 +66,16 @@ def extract_json_from_markdown(text):
 
 
 def validate_json_data(json_object):
+    """
+    Validates JSON data by attempting to load it using json.loads, ast.literal_eval, or extracting JSON-like structures.
+
+    Args:
+        json_object: The JSON object to validate.
+
+    Returns:
+        tuple: A tuple containing a boolean indicating validation success, the parsed JSON object, and an error message if validation fails.
+    """
+
     valid = False
     error_message = None
     result_json = None

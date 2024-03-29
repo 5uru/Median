@@ -1,16 +1,18 @@
 import os
 
-from mlx_lm import generate, load
+from mlx_lm import generate , load
 
 from median.utils import median_logger
 
 
 def load_model():
     """
-    Load the model and tokenizer.
+    Loads a language model and tokenizer.
 
-    :return: The loaded model and tokenizer.
+    Returns:
+        tuple: A tuple containing the loaded language model and tokenizer.
     """
+
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     model_name = "mlx-community/Mistral-7B-Instruct-v0.2-4bit"
@@ -21,26 +23,34 @@ def load_model():
 
 def run_inference(model, tokenizer, prompt, model_config):
     """
-    Run inference on the given prompt using the provided model, tokenizer, and configuration.
+    Runs inference using the provided language model and tokenizer on a given prompt.
 
-    :param model: The loaded model.
-    :param tokenizer: The tokenizer.
-    :param prompt: The prompt to generate the output.
-    :param model_config: The model configuration.
-    :return: The generated output.
+    Args:
+        model: The language model.
+        tokenizer: The tokenizer.
+        prompt: The prompt for inference.
+        model_config: Additional configuration for the model.
+
+    Returns:
+        str: The generated output based on the model and prompt.
     """
+
     return generate(model, tokenizer, prompt=prompt, **model_config)
 
 
-def generation(content, language, followings):
+def generation(content: str, language: str, followings: str):
     """
-    Generate a quiz based on the given content, language, and followings.
+    Generates a quiz based on the provided content, language, and specified themes.
 
-    :param content: The content to generate the quiz from.
-    :param language: The language of the quiz.
-    :param followings: The themes to prioritize in the quiz.
-    :return: The generated quiz as a string.
+    Args:
+        content (str): The content for which the quiz is generated.
+        language (str): The language for the quiz.
+        followings (str): The identified themes for the quiz.
+
+    Returns:
+        str: The generated quiz output.
     """
+
     model, tokenizer = load_model()
 
     model_config = {

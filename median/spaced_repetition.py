@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta , datetime
 
 import ebisu
 
@@ -6,17 +6,46 @@ from median.utils import median_logger
 
 
 def convert_to_datetime(date_str, date_format="%Y-%m-%d %H:%M:%S.%f"):
-    """Convert a date string to a datetime object."""
+    """
+    Converts a date string to a datetime object.
+
+    Args:
+        date_str (str): The date string to convert.
+        date_format (str): The format of the date string (default is "%Y-%m-%d %H:%M:%S.%f").
+
+    Returns:
+        datetime: The datetime object representing the converted date.
+    """
+
     return datetime.strptime(date_str, date_format)
 
 
 def hours_since(date_last_test):
-    """Calculate the hours elapsed since the given datetime."""
+    """
+    Calculates the number of hours since a given date.
+
+    Args:
+        date_last_test (datetime): The date to calculate the hours since.
+
+    Returns:
+        float: The number of hours elapsed since the given date.
+    """
+
     one_hour = timedelta(hours=1)
     return (datetime.now() - date_last_test) / one_hour
 
 
 def recall_prediction(database):
+    """
+    Predicts recall for each factID based on the database information.
+
+    Args:
+        database: The database containing information for each factID.
+
+    Returns:
+        list: A list of dictionaries with 'factID' and 'recall' values, sorted by 'recall' in ascending order.
+    """
+
     median_logger.info("Recall prediction for each factID")
     recall_list = [
         {
@@ -35,6 +64,19 @@ def recall_prediction(database):
 
 
 def update_model(model, result, total, last_test):
+    """
+    Updates a model based on the result, total, and last test information.
+
+    Args:
+        model: The current model to update.
+        result: The result of the update.
+        total: The total number of updates.
+        last_test: The date of the last test.
+
+    Returns:
+        str: The updated model after the modifications.
+    """
+
     median_logger.info("Update model based on the result")
     try:
         new_model = ebisu.updateRecall(

@@ -8,11 +8,15 @@ from median.utils import median_logger
 
 def read_docx(docx_file):
     """
-    Read the content of a DOCX file.
+    Reads the content of a DOCX file.
 
-    :param docx_file: The path to the DOCX file or a file-like object.
-    :return: The content of the DOCX file as a string.
+    Args:
+        docx_file: The path to the DOCX file or a file-like object.
+
+    Returns:
+        str: The content of the DOCX file as a string.
     """
+
     if isinstance(docx_file, str):
         doc = Document(docx_file)
     else:
@@ -22,11 +26,15 @@ def read_docx(docx_file):
 
 def read_pdf(pdf_file):
     """
-    Read the content of a PDF file with improved error handling and efficiency.
+    Reads the content of a PDF file.
 
-    :param pdf_file: The path to the PDF file or a file-like object.
-    :return: The content of the PDF file as a string.
+    Args:
+        pdf_file: The path to the PDF file or a file-like object.
+
+    Returns:
+        str: The content of the PDF file as a string, extracted from all pages.
     """
+
     try:
         if isinstance(pdf_file, str):
             with open(pdf_file, "rb") as f:
@@ -46,12 +54,18 @@ def read_pdf(pdf_file):
 
 def main(file, file_type):
     """
-    Read the content of a file based on its type.
+    Main function to read the content of different file types based on the specified file type.
 
-    :param file: The file object or the file path.
-    :param file_type: The MIME type of the file.
-    :return: The content of the file as a string or None if the file type is not supported.
+    Args:
+        file: The file to read.
+        file_type: The type of the file to determine the appropriate reader.
+
+    Returns:
+        str: The content of the file as a string.
+    Raises:
+        ValueError: If the file type is not supported.
     """
+
     file_readers = {
         "text/markdown": lambda f: f.read().decode(),
         "application/pdf": read_pdf,
