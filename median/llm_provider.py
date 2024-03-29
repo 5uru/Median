@@ -1,6 +1,7 @@
 import os
 
-from mlx_lm import generate, load
+from mlx_lm import generate
+from mlx_lm import load
 
 from median.utils import median_logger
 

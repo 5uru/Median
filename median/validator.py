@@ -4,7 +4,8 @@ import re
 from typing import List
 
 from jsonschema import validate
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
+from pydantic import ValidationError
 
 from median.utils import median_logger
 
