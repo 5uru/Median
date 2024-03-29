@@ -6,11 +6,13 @@ from median.utils import median_logger
 
 
 def load_model():
-    """
-    Loads a language model and tokenizer.
+    """Loads a language model and tokenizer.
 
-    Returns:
-        tuple: A tuple containing the loaded language model and tokenizer.
+
+    :returns: A tuple containing the loaded language model and tokenizer.
+
+    :rtype: tuple
+
     """
 
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -22,33 +24,35 @@ def load_model():
 
 
 def run_inference(model, tokenizer, prompt, model_config):
-    """
-    Runs inference using the provided language model and tokenizer on a given prompt.
+    """Runs inference using the provided language model and tokenizer on a given prompt.
 
-    Args:
-        model: The language model.
-        tokenizer: The tokenizer.
-        prompt: The prompt for inference.
-        model_config: Additional configuration for the model.
+    :param model: The language model.
+    :param tokenizer: The tokenizer.
+    :param prompt: The prompt for inference.
+    :param model_config: Additional configuration for the model.
+    :returns: The generated output based on the model and prompt.
+    :rtype: str
 
-    Returns:
-        str: The generated output based on the model and prompt.
     """
 
     return generate(model, tokenizer, prompt=prompt, **model_config)
 
 
 def generation(content: str, language: str, followings: str):
-    """
-    Generates a quiz based on the provided content, language, and specified themes.
+    """Generates a quiz based on the provided content, language, and specified themes.
 
-    Args:
-        content (str): The content for which the quiz is generated.
-        language (str): The language for the quiz.
-        followings (str): The identified themes for the quiz.
+    :param content: The content for which the quiz is generated.
+    :type content: str
+    :param language: The language for the quiz.
+    :type language: str
+    :param followings: The identified themes for the quiz.
+    :type followings: str
+    :param content: str: 
+    :param language: str: 
+    :param followings: str: 
+    :returns: The generated quiz output.
+    :rtype: str
 
-    Returns:
-        str: The generated quiz output.
     """
 
     model, tokenizer = load_model()
@@ -81,10 +85,12 @@ Here is a list of tools that you have available to you:
 
 ```python
 class Quiz(BaseModel):
+    """ """
     question: str
     answer: str
 
 class QuizCollection(BaseModel):
+    """ """
     collection: List[Quiz]
 <|END_OF_TURN_TOKEN|> <|START_OF_TURN_TOKEN|><|USER_TOKEN|>
 Please generate a well-structured set of significant and relevant questions and answers strictly based on the following corpus:

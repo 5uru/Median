@@ -7,19 +7,21 @@ from median.validator import validate_json_data
 
 
 def generate_quiz_for_doc(doc: str, lang: str, topics: list[str]):
-    """
-    Generates a quiz based on a document, language, and topics.
+    """Generates a quiz based on a document, language, and topics.
 
-    Args:
-        doc (str): The document for which the quiz is generated.
-        lang (str): The language for the quiz.
-        topics (list[str]): The topics to include in the quiz.
+    :param doc: The document for which the quiz is generated.
+    :type doc: str
+    :param lang: The language for the quiz.
+    :type lang: str
+    :param topics: The topics to include in the quiz.
+    :type topics: list[str]
+    :param doc: str: 
+    :param lang: str: 
+    :param topics: list[str]: 
+    :returns: The generated quiz data in JSON format.
+    :rtype: dict
+    :raises ValueError: If a valid quiz cannot be generated after 3 attempts.
 
-    Returns:
-        dict: The generated quiz data in JSON format.
-
-    Raises:
-        ValueError: If a valid quiz cannot be generated after 3 attempts.
     """
 
     median_logger.info(f"Generating quiz for: {doc}")
@@ -34,14 +36,14 @@ def generate_quiz_for_doc(doc: str, lang: str, topics: list[str]):
 
 
 def quiz(content: str):
-    """
-    Generates quizzes based on the content provided.
+    """Generates quizzes based on the content provided.
 
-    Args:
-        content (str): The content for which quizzes are generated.
+    :param content: The content for which quizzes are generated.
+    :type content: str
+    :param content: str: 
+    :returns: A tuple containing the list of generated quizzes and the topics extracted from the content.
+    :rtype: tuple
 
-    Returns:
-        tuple: A tuple containing the list of generated quizzes and the topics extracted from the content.
     """
 
     lang = language_detection(content)

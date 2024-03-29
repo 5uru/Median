@@ -30,11 +30,13 @@ SPACY_MODELS = {}
 
 # Logging setup
 def setup_logging():
-    """
-    Sets up logging configuration for the application.
+    """Sets up logging configuration for the application.
 
-    Returns:
-        Logger: The configured logger object.
+
+    :returns: The configured logger object.
+
+    :rtype: Logger
+
     """
 
     logging.basicConfig(
@@ -71,14 +73,14 @@ median_logger = setup_logging()
 
 # Utility Functions
 def load_spacy_model(spacy_model: str) -> Language:
-    """
-    Loads a SpaCy language model and caches it for future use.
+    """Loads a SpaCy language model and caches it for future use.
 
-    Args:
-        spacy_model (str): The name of the SpaCy model to load.
+    :param spacy_model: The name of the SpaCy model to load.
+    :type spacy_model: str
+    :param spacy_model: str: 
+    :returns: The loaded SpaCy language model.
+    :rtype: Language
 
-    Returns:
-        Language: The loaded SpaCy language model.
     """
 
     if spacy_model not in SPACY_MODELS:
@@ -95,14 +97,14 @@ def load_spacy_model(spacy_model: str) -> Language:
 
 
 def language_detection(content: str) -> str:
-    """
-    Detects the language of the provided content.
+    """Detects the language of the provided content.
 
-    Args:
-        content (str): The content for language detection.
+    :param content: The content for language detection.
+    :type content: str
+    :param content: str: 
+    :returns: The detected language.
+    :rtype: str
 
-    Returns:
-        str: The detected language.
     """
 
     return detect(content)
@@ -111,16 +113,20 @@ def language_detection(content: str) -> str:
 def get_topics(
     content: str, language: str, spacy_model: Optional[str] = "en_core_web_sm"
 ) -> List[str]:
-    """
-    Extracts key topics from the provided content using the specified language and SpaCy model.
+    """Extracts key topics from the provided content using the specified language and SpaCy model.
 
-    Args:
-        content (str): The content from which to extract key topics.
-        language (str): The language of the content.
-        spacy_model (Optional[str]): The SpaCy model to use for topic extraction (default is "en_core_web_sm").
+    :param content: The content from which to extract key topics.
+    :type content: str
+    :param language: The language of the content.
+    :type language: str
+    :param spacy_model: The SpaCy model to use for topic extraction (default is "en_core_web_sm").
+    :type spacy_model: Optional[str]
+    :param content: str: 
+    :param language: str: 
+    :param spacy_model: Optional[str]:  (Default value = "en_core_web_sm")
+    :returns: A list of key topics extracted from the content.
+    :rtype: List[str]
 
-    Returns:
-        List[str]: A list of key topics extracted from the content.
     """
 
     nlp = load_spacy_model(spacy_model)
@@ -140,16 +146,20 @@ def split_documents(
     knowledge_base: List[LangchainDocument],
     tokenizer_name: Optional[str] = EMBEDDING_MODEL_NAME,
 ) -> List[LangchainDocument]:
-    """
-    Splits and deduplicates documents based on the specified chunk size and tokenizer.
+    """Splits and deduplicates documents based on the specified chunk size and tokenizer.
 
-    Args:
-        chunk_size (int): The size of each chunk for splitting the documents.
-        knowledge_base (List[LangchainDocument]): The list of documents to split.
-        tokenizer_name (Optional[str]): The name of the tokenizer to use (default is EMBEDDING_MODEL_NAME).
+    :param chunk_size: The size of each chunk for splitting the documents.
+    :type chunk_size: int
+    :param knowledge_base: The list of documents to split.
+    :type knowledge_base: List[LangchainDocument]
+    :param tokenizer_name: The name of the tokenizer to use (default is EMBEDDING_MODEL_NAME).
+    :type tokenizer_name: Optional[str]
+    :param chunk_size: int: 
+    :param knowledge_base: List[LangchainDocument]: 
+    :param tokenizer_name: Optional[str]:  (Default value = EMBEDDING_MODEL_NAME)
+    :returns: The list of unique documents after splitting and deduplication.
+    :rtype: List[LangchainDocument]
 
-    Returns:
-        List[LangchainDocument]: The list of unique documents after splitting and deduplication.
     """
 
     text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
