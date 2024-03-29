@@ -9,67 +9,11 @@ from langchain.docstore.document import Document as LangchainDocument
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langdetect import detect
 from pke.unsupervised import TopicRank
+from spacy.language import Language
 from transformers import AutoTokenizer
 
-logging.basicConfig(
-    format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
-    datefmt="%Y-%m-%d:%H:%M:%S",
-    level=logging.INFO,
-)
-script_dir = os.path.dirname(os.path.abspath(__file__))
-now = datetime.datetime.now()
-log_folder = os.path.join(script_dir, "median_logs")
-os.makedirs(log_folder, exist_ok=True)
-log_file_path = os.path.join(
-    log_folder,
-    f"function-calling-median_{ now.strftime('%Y-%m-%d_%H-%M-%S') }.log",
-)
-# Use RotatingFileHandler from the logging.handlers module
-file_handler = RotatingFileHandler(log_file_path, maxBytes=0, backupCount=0)
-file_handler.setLevel(logging.INFO)
-
-formatter = logging.Formatter(
-    "%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
-    datefmt="%Y-%m-%d:%H:%M:%S",
-)
-file_handler.setFormatter(formatter)
-
-median_logger = logging.getLogger("function-calling-median")
-median_logger.addHandler(file_handler)
-
-
-def language_detection(content):
-    return detect(content)
-
-
-def get_topics(content, language, spacy_model: Optional[str] = "en_core_web_sm"):
-    # Load the SpaCy model
-    nlp = spacy.load(spacy_model)
-    median_logger.info(f"Loaded SpaCy model: {spacy_model}")
-    # Create a TopicRank extractor
-    extractor = TopicRank()
-    # Load the content of the document
-    extractor.load_document(
-        content.replace("\n", " "),
-        language=language,
-        spacy_model=nlp,  # Pass the loaded SpaCy model
-        normalization="stemming",
-    )
-
-    # Select the key phrase candidates
-    extractor.candidate_selection()
-
-    # Weight the candidates
-    extractor.candidate_weighting()
-
-    # The n-highest (5) scored candidates
-    key_phrases = extractor.get_n_best(n=5, stemming=False)
-    median_logger.info(f"Key phrases: {key_phrases}")
-    return [candidate for (candidate, _) in key_phrases]
-
-
+# Constants
 EMBEDDING_MODEL_NAME = "thenlper/gte-small"
-
 MARKDOWN_SEPARATORS = [
     "\n#{1,6} ",
     "```\n",
@@ -81,6 +25,78 @@ MARKDOWN_SEPARATORS = [
     " ",
     "",
 ]
+SPACY_MODELS = {}
+
+
+# Logging setup
+def setup_logging():
+    logging.basicConfig(
+        format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+        datefmt="%Y-%m-%d:%H:%M:%S",
+        level=logging.INFO,
+    )
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    now = datetime.datetime.now()
+    log_folder = os.path.join(script_dir, "median_logs")
+    os.makedirs(log_folder, exist_ok=True)
+    log_file_path = os.path.join(
+        log_folder,
+        f"median_{now.strftime('%Y-%m-%d_%H-%M-%S')}.log",
+    )
+    file_handler = RotatingFileHandler(
+        log_file_path, maxBytes=5 * 1024 * 1024, backupCount=5
+    )
+    file_handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter(
+        "%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+        datefmt="%Y-%m-%d:%H:%M:%S",
+    )
+    file_handler.setFormatter(formatter)
+
+    logger = logging.getLogger("median")
+    logger.addHandler(file_handler)
+    return logger
+
+
+median_logger = setup_logging()
+
+
+# Utility Functions
+def load_spacy_model(spacy_model: str) -> Language:
+    """Load and cache SpaCy model to avoid reloading for each call."""
+    if spacy_model not in SPACY_MODELS:
+        try:
+            SPACY_MODELS[spacy_model] = spacy.load(spacy_model)
+            median_logger.info(f"Loaded SpaCy model: {spacy_model}")
+        except Exception as e:
+            median_logger.error(
+                f"Error loading SpaCy model: {e}. Attempting to download."
+            )
+            spacy.cli.download(spacy_model)
+            SPACY_MODELS[spacy_model] = spacy.load(spacy_model)
+    return SPACY_MODELS[spacy_model]
+
+
+def language_detection(content: str) -> str:
+    """Detect the language of the given content."""
+    return detect(content)
+
+
+def get_topics(
+    content: str, language: str, spacy_model: Optional[str] = "en_core_web_sm"
+) -> List[str]:
+    """Extract key topics from the content using TopicRank and a specified SpaCy model."""
+    nlp = load_spacy_model(spacy_model)
+    extractor = TopicRank()
+    extractor.load_document(
+        content, language=language, spacy_model=nlp, normalization="stemming"
+    )
+    extractor.candidate_selection()
+    extractor.candidate_weighting()
+    key_phrases = extractor.get_n_best(n=5, stemming=False)
+    median_logger.info(f"Extracted key phrases: {key_phrases}")
+    return [candidate for (candidate, _) in key_phrases]
 
 
 def split_documents(
@@ -88,9 +104,7 @@ def split_documents(
     knowledge_base: List[LangchainDocument],
     tokenizer_name: Optional[str] = EMBEDDING_MODEL_NAME,
 ) -> List[LangchainDocument]:
-    """
-    Split documents into chunks of maximum size `chunk_size` tokens and return a list of documents.
-    """
+    """Split documents into smaller chunks based on the specified tokenizer and chunk size."""
     text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
         AutoTokenizer.from_pretrained(tokenizer_name),
         chunk_size=chunk_size,
@@ -100,17 +114,15 @@ def split_documents(
         separators=MARKDOWN_SEPARATORS,
     )
 
-    # Split documents
-    docs_processed = []
-    for doc in knowledge_base:
-        docs_processed += text_splitter.split_documents([doc])
-    median_logger.info(f"Split documents into {len(docs_processed)} chunks")
-    # Remove duplicates
-    unique_texts = {}
-    docs_processed_unique = []
-    for doc in docs_processed:
-        if doc.page_content not in unique_texts:
-            unique_texts[doc.page_content] = True
-            docs_processed_unique.append(doc)
-    median_logger.info("Removed duplicates")
-    return docs_processed_unique
+    # Split and deduplicate documents
+    docs_processed = text_splitter.split_documents(knowledge_base)
+    unique_texts = set()
+    docs_unique = [
+        doc
+        for doc in docs_processed
+        if not (doc.page_content in unique_texts or unique_texts.add(doc.page_content))
+    ]
+    median_logger.info(
+        f"Processed and deduplicated documents. Total unique chunks: {len(docs_unique)}."
+    )
+    return docs_unique
