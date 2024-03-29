@@ -66,12 +66,12 @@ if st.session_state["flashcard_data"] and st.session_state["topics"]:
         # HTML content with styling
         html_content = f"""
         <div>
-            <span ><b>Topics:   </b> </span> 
+            <span ><b>Topics:   </b> </span>
             <span style="font-weight: bold; color: #008080;">{st.session_state["topics"][0].upper()} ,</span>
             <span style="font-weight: bold; color: #FFA500;">{st.session_state["topics"][1].upper()} ,</span>
             <span style="font-weight: bold; color: #FF7F50;">{st.session_state["topics"][2].upper()} , </span>
             <span style="font-weight: bold; color: #708090;">{st.session_state["topics"][3].upper()} ,</span>
-            <span style="font-weight: bold; color: #808000;">{st.session_state["topics"][4].upper()} \n</span> 
+            <span style="font-weight: bold; color: #808000;">{st.session_state["topics"][4].upper()} \n</span>
         </div>
         """
 

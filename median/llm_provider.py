@@ -48,9 +48,9 @@ def generation(content: str, language: str, followings: str):
     :type language: str
     :param followings: The identified themes for the quiz.
     :type followings: str
-    :param content: str: 
-    :param language: str: 
-    :param followings: str: 
+    :param content: str:
+    :param language: str:
+    :param followings: str:
     :returns: The generated quiz output.
     :rtype: str
 

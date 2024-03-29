@@ -78,7 +78,7 @@ def load_spacy_model(spacy_model: str) -> Language:
 
     :param spacy_model: The name of the SpaCy model to load.
     :type spacy_model: str
-    :param spacy_model: str: 
+    :param spacy_model: str:
     :returns: The loaded SpaCy language model.
     :rtype: Language
 
@@ -102,7 +102,7 @@ def language_detection(content: str) -> str:
 
     :param content: The content for language detection.
     :type content: str
-    :param content: str: 
+    :param content: str:
     :returns: The detected language.
     :rtype: str
 
@@ -122,8 +122,8 @@ def get_topics(
     :type language: str
     :param spacy_model: The SpaCy model to use for topic extraction (default is "en_core_web_sm").
     :type spacy_model: Optional[str]
-    :param content: str: 
-    :param language: str: 
+    :param content: str:
+    :param language: str:
     :param spacy_model: Optional[str]:  (Default value = "en_core_web_sm")
     :returns: A list of key topics extracted from the content.
     :rtype: List[str]
@@ -155,8 +155,8 @@ def split_documents(
     :type knowledge_base: List[LangchainDocument]
     :param tokenizer_name: The name of the tokenizer to use (default is EMBEDDING_MODEL_NAME).
     :type tokenizer_name: Optional[str]
-    :param chunk_size: int: 
-    :param knowledge_base: List[LangchainDocument]: 
+    :param chunk_size: int:
+    :param knowledge_base: List[LangchainDocument]:
     :param tokenizer_name: Optional[str]:  (Default value = EMBEDDING_MODEL_NAME)
     :returns: The list of unique documents after splitting and deduplication.
     :rtype: List[LangchainDocument]

@@ -17,9 +17,9 @@ def generate_quiz_for_doc(doc: str, lang: str, topics: list[str]):
     :type lang: str
     :param topics: The topics to include in the quiz.
     :type topics: list[str]
-    :param doc: str: 
-    :param lang: str: 
-    :param topics: list[str]: 
+    :param doc: str:
+    :param lang: str:
+    :param topics: list[str]:
     :returns: The generated quiz data in JSON format.
     :rtype: dict
     :raises ValueError: If a valid quiz cannot be generated after 3 attempts.
@@ -42,7 +42,7 @@ def quiz(content: str):
 
     :param content: The content for which quizzes are generated.
     :type content: str
-    :param content: str: 
+    :param content: str:
     :returns: A tuple containing the list of generated quizzes and the topics extracted from the content.
     :rtype: tuple
 
