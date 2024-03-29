@@ -31,7 +31,8 @@ rerun = False
 with st.form("my_form"):
     flashcard_name = st.text_input("Flashcard Name")
 
-    data = st.file_uploader("Upload data file", type=["pdf", "docx", "md", "txt"])
+    data = st.file_uploader("Upload data file", type=[
+                            "pdf", "docx", "md", "txt"])
     col1, col2 = st.columns(2)
     with col1:
         submit = st.form_submit_button("Generate Cards")
