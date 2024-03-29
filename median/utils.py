@@ -41,7 +41,8 @@ def setup_logging():
     """
 
     logging.basicConfig(
-        format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
+        format=
+        "%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
         datefmt="%Y-%m-%d:%H:%M:%S",
         level=logging.INFO,
     )
@@ -53,9 +54,9 @@ def setup_logging():
         log_folder,
         f"median_{now.strftime('%Y-%m-%d_%H-%M-%S')}.log",
     )
-    file_handler = RotatingFileHandler(
-        log_file_path, maxBytes=5 * 1024 * 1024, backupCount=5
-    )
+    file_handler = RotatingFileHandler(log_file_path,
+                                       maxBytes=5 * 1024 * 1024,
+                                       backupCount=5)
     file_handler.setLevel(logging.INFO)
 
     formatter = logging.Formatter(
@@ -90,8 +91,7 @@ def load_spacy_model(spacy_model: str) -> Language:
             median_logger.info(f"Loaded SpaCy model: {spacy_model}")
         except Exception as e:
             median_logger.error(
-                f"Error loading SpaCy model: {e}. Attempting to download."
-            )
+                f"Error loading SpaCy model: {e}. Attempting to download.")
             spacy.cli.download(spacy_model)
             SPACY_MODELS[spacy_model] = spacy.load(spacy_model)
     return SPACY_MODELS[spacy_model]
@@ -111,9 +111,9 @@ def language_detection(content: str) -> str:
     return detect(content)
 
 
-def get_topics(
-    content: str, language: str, spacy_model: Optional[str] = "en_core_web_sm"
-) -> List[str]:
+def get_topics(content: str,
+               language: str,
+               spacy_model: Optional[str] = "en_core_web_sm") -> List[str]:
     """Extracts key topics from the provided content using the specified language and SpaCy model.
 
     :param content: The content from which to extract key topics.
@@ -132,9 +132,10 @@ def get_topics(
 
     nlp = load_spacy_model(spacy_model)
     extractor = TopicRank()
-    extractor.load_document(
-        content, language=language, spacy_model=nlp, normalization="stemming"
-    )
+    extractor.load_document(content,
+                            language=language,
+                            spacy_model=nlp,
+                            normalization="stemming")
     extractor.candidate_selection()
     extractor.candidate_weighting()
     key_phrases = extractor.get_n_best(n=5, stemming=False)
@@ -176,9 +177,9 @@ def split_documents(
     docs_processed = text_splitter.split_documents(knowledge_base)
     unique_texts = set()
     docs_unique = [
-        doc
-        for doc in docs_processed
-        if not (doc.page_content in unique_texts or unique_texts.add(doc.page_content))
+        doc for doc in docs_processed
+        if not (doc.page_content in unique_texts
+                or unique_texts.add(doc.page_content))
     ]
     median_logger.info(
         f"Processed and deduplicated documents. Total unique chunks: {len(docs_unique)}."

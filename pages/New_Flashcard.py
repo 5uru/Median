@@ -12,7 +12,6 @@ st.set_page_config(
     layout="wide",
 )
 
-
 # Initialization
 if "flashcard_data" not in st.session_state:
     st.session_state["flashcard_data"] = []
@@ -23,7 +22,6 @@ if "topics" not in st.session_state:
 if "rerun" not in st.session_state:
     st.session_state["rerun"] = False
 
-
 st.title("Create New Flashcard")
 topics = None
 quiz_collection = None
@@ -31,7 +29,8 @@ rerun = False
 with st.form("my_form"):
     flashcard_name = st.text_input("Flashcard Name")
 
-    data = st.file_uploader("Upload data file", type=["pdf", "docx", "md", "txt"])
+    data = st.file_uploader("Upload data file",
+                            type=["pdf", "docx", "md", "txt"])
     col1, col2 = st.columns(2)
     with col1:
         submit = st.form_submit_button("Generate Cards")
@@ -58,7 +57,6 @@ if rerun and (data is not None) and (flashcard_name != ""):
     st.session_state["topics"] = topics
     st.session_state["flashcard_data"].extend(quiz_collection)
 
-
 if st.session_state["flashcard_data"] and st.session_state["topics"]:
     col1, col2 = st.columns([9, 1])
 
@@ -83,14 +81,16 @@ if st.session_state["flashcard_data"] and st.session_state["topics"]:
             new_answer = st.text_area("New Answer")
             if st.button("Add", type="primary"):
                 st.session_state["flashcard_data"].insert(
-                    0, {"question": new_question, "answer": new_answer}
-                )
+                    0, {
+                        "question": new_question,
+                        "answer": new_answer
+                    })
                 st.rerun()
-
 
 # Load the flashcard_data from the temporary file
 if st.session_state["flashcard_data"]:
-    for quiz_index, flashcard_quiz in enumerate(st.session_state["flashcard_data"]):
+    for quiz_index, flashcard_quiz in enumerate(
+            st.session_state["flashcard_data"]):
         st.divider()
         with st.container():
             st.write("#### Question: ")
@@ -99,9 +99,10 @@ if st.session_state["flashcard_data"]:
             st.write(flashcard_quiz["answer"])
             col1, col2 = st.columns(2)
             with col2:
-                if st.button(
-                    "Delete", use_container_width=True, type="primary", key=quiz_index
-                ):
+                if st.button("Delete",
+                             use_container_width=True,
+                             type="primary",
+                             key=quiz_index):
                     st.session_state["flashcard_data"].pop(quiz_index)
                     st.rerun()
 
@@ -121,15 +122,14 @@ if st.session_state["flashcard_data"]:
                     )
                     if st.button("Update", key=f"{quiz_index}_replace"):
                         st.session_state["flashcard_data"][quiz_index][
-                            "question"
-                        ] = new_question
+                            "question"] = new_question
                         st.session_state["flashcard_data"][quiz_index][
-                            "answer"
-                        ] = new_answer
+                            "answer"] = new_answer
                         st.rerun()
 
     st.divider()
-    if st.button("Create Flashcards", use_container_width=True, type="primary"):
+    if st.button("Create Flashcards", use_container_width=True,
+                 type="primary"):
         for flashcard_quiz in st.session_state["flashcard_data"]:
             insert_flashcard_data(
                 question=flashcard_quiz["question"],

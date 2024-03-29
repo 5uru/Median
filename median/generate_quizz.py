@@ -29,7 +29,8 @@ def generate_quiz_for_doc(doc: str, lang: str, topics: list[str]):
     median_logger.info(f"Generating quiz for: {doc}")
     for attempt in range(3):
         quiz_data = generation(doc, lang, " ,".join(topics))
-        median_logger.info(f"Attempt {attempt + 1}, generated quiz: {quiz_data}")
+        median_logger.info(
+            f"Attempt {attempt + 1}, generated quiz: {quiz_data}")
         valid, quiz_json, error = validate_json_data(quiz_data)
         if valid:
             return quiz_json
@@ -57,10 +58,12 @@ def quiz(content: str):
     content_formatted = [doc.page_content for doc in content_split]
 
     generated_quizzes = [
-        generate_quiz_for_doc(doc, lang, topics) for doc in content_formatted if doc
+        generate_quiz_for_doc(doc, lang, topics) for doc in content_formatted
+        if doc
     ]
 
     quiz_list = [
-        q for quiz_content in generated_quizzes for q in quiz_content["collection"]
+        q for quiz_content in generated_quizzes
+        for q in quiz_content["collection"]
     ]
     return quiz_list, topics

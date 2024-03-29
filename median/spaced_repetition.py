@@ -45,17 +45,16 @@ def recall_prediction(database):
     """
 
     median_logger.info("Recall prediction for each factID")
-    recall_list = [
-        {
-            "factID": row["factID"],
-            "recall": ebisu.predictRecall(
-                row["model"],
-                hours_since(convert_to_datetime(row["lastTest"])),
-                exact=True,
-            ),
-        }
-        for row in database
-    ]
+    recall_list = [{
+        "factID":
+        row["factID"],
+        "recall":
+        ebisu.predictRecall(
+            row["model"],
+            hours_since(convert_to_datetime(row["lastTest"])),
+            exact=True,
+        ),
+    } for row in database]
     # Sort the recall_list by 'recall' value in ascending order outside the loop
     recall_list.sort(key=lambda x: x["recall"])
     return recall_list
@@ -76,12 +75,10 @@ def update_model(model, result, total, last_test):
     median_logger.info("Update model based on the result")
     try:
         new_model = ebisu.updateRecall(
-            model, result, total, hours_since(convert_to_datetime(last_test))
-        )
+            model, result, total, hours_since(convert_to_datetime(last_test)))
     except Exception:
         new_model = ebisu.updateRecall(
-            model, 1, total, hours_since(convert_to_datetime(last_test))
-        )
+            model, 1, total, hours_since(convert_to_datetime(last_test)))
     if result == 2:
         new_model = ebisu.rescaleHalflife(new_model, 2.0)
     return str(new_model)
