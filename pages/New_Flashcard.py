@@ -60,7 +60,6 @@ if rerun and (data is not None) and (flashcard_name != ""):
 
 
 if st.session_state["flashcard_data"] and st.session_state["topics"]:
-
     col1, col2 = st.columns([9, 1])
 
     with col1:
