@@ -1,7 +1,7 @@
 from langchain.docstore.document import Document as LangchainDocument
 
 from median.llm_provider import generation
-from median.utils import get_topics , language_detection , median_logger , split_documents
+from median.utils import get_topics, language_detection, median_logger, split_documents
 from median.validator import validate_json_data
 
 

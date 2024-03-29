@@ -2,7 +2,7 @@ import datetime
 import logging
 import os
 from logging.handlers import RotatingFileHandler
-from typing import List , Optional
+from typing import List, Optional
 
 import spacy
 from langchain.docstore.document import Document as LangchainDocument
