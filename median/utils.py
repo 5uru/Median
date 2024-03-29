@@ -2,7 +2,7 @@ import datetime
 import logging
 import os
 from logging.handlers import RotatingFileHandler
-from typing import List, Optional
+from typing import List , Optional
 
 import spacy
 from langchain.docstore.document import Document as LangchainDocument
@@ -30,6 +30,13 @@ SPACY_MODELS = {}
 
 # Logging setup
 def setup_logging():
+    """
+    Sets up logging configuration for the application.
+
+    Returns:
+        Logger: The configured logger object.
+    """
+
     logging.basicConfig(
         format="%(asctime)s,%(msecs)03d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s",
         datefmt="%Y-%m-%d:%H:%M:%S",
@@ -64,7 +71,16 @@ median_logger = setup_logging()
 
 # Utility Functions
 def load_spacy_model(spacy_model: str) -> Language:
-    """Load and cache SpaCy model to avoid reloading for each call."""
+    """
+    Loads a SpaCy language model and caches it for future use.
+
+    Args:
+        spacy_model (str): The name of the SpaCy model to load.
+
+    Returns:
+        Language: The loaded SpaCy language model.
+    """
+
     if spacy_model not in SPACY_MODELS:
         try:
             SPACY_MODELS[spacy_model] = spacy.load(spacy_model)
@@ -79,14 +95,34 @@ def load_spacy_model(spacy_model: str) -> Language:
 
 
 def language_detection(content: str) -> str:
-    """Detect the language of the given content."""
+    """
+    Detects the language of the provided content.
+
+    Args:
+        content (str): The content for language detection.
+
+    Returns:
+        str: The detected language.
+    """
+
     return detect(content)
 
 
 def get_topics(
     content: str, language: str, spacy_model: Optional[str] = "en_core_web_sm"
 ) -> List[str]:
-    """Extract key topics from the content using TopicRank and a specified SpaCy model."""
+    """
+    Extracts key topics from the provided content using the specified language and SpaCy model.
+
+    Args:
+        content (str): The content from which to extract key topics.
+        language (str): The language of the content.
+        spacy_model (Optional[str]): The SpaCy model to use for topic extraction (default is "en_core_web_sm").
+
+    Returns:
+        List[str]: A list of key topics extracted from the content.
+    """
+
     nlp = load_spacy_model(spacy_model)
     extractor = TopicRank()
     extractor.load_document(
@@ -104,7 +140,18 @@ def split_documents(
     knowledge_base: List[LangchainDocument],
     tokenizer_name: Optional[str] = EMBEDDING_MODEL_NAME,
 ) -> List[LangchainDocument]:
-    """Split documents into smaller chunks based on the specified tokenizer and chunk size."""
+    """
+    Splits and deduplicates documents based on the specified chunk size and tokenizer.
+
+    Args:
+        chunk_size (int): The size of each chunk for splitting the documents.
+        knowledge_base (List[LangchainDocument]): The list of documents to split.
+        tokenizer_name (Optional[str]): The name of the tokenizer to use (default is EMBEDDING_MODEL_NAME).
+
+    Returns:
+        List[LangchainDocument]: The list of unique documents after splitting and deduplication.
+    """
+
     text_splitter = RecursiveCharacterTextSplitter.from_huggingface_tokenizer(
         AutoTokenizer.from_pretrained(tokenizer_name),
         chunk_size=chunk_size,
