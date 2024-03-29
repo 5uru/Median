@@ -24,8 +24,7 @@ def generate_quiz_for_doc(doc: str, lang: str, topics: list[str]):
     median_logger.info(f"Generating quiz for: {doc}")
     for attempt in range(3):
         quiz_data = generation(doc, lang, " ,".join(topics))
-        median_logger.info(
-            f"Attempt {attempt + 1}, generated quiz: {quiz_data}")
+        median_logger.info(f"Attempt {attempt + 1}, generated quiz: {quiz_data}")
         valid, quiz_json, error = validate_json_data(quiz_data)
         if valid:
             return quiz_json

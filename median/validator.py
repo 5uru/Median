@@ -90,12 +90,10 @@ def validate_json_data(json_object):
             median_logger.error("Failed to load JSON data using json.loads")
             try:
                 result_json = ast.literal_eval(json_object)
-                median_logger.info(
-                    f"JSON data: {result_json} using ast.literal_eval")
+                median_logger.info(f"JSON data: {result_json} using ast.literal_eval")
             except (SyntaxError, ValueError):
                 # If both json.loads and ast.literal_eval fail, try extracting JSON-like structures
-                median_logger.error(
-                    "Failed to load JSON data using ast.literal_eval")
+                median_logger.error("Failed to load JSON data using ast.literal_eval")
                 try:
                     result_json = extract_json_from_markdown(json_object)
                 except Exception as e:
@@ -116,8 +114,7 @@ def validate_json_data(json_object):
             for index, item in enumerate(result_json):
                 try:
                     validate(instance=item, schema=json_schema)
-                    median_logger.info(
-                        f"Validation successful for item {index + 1}")
+                    median_logger.info(f"Validation successful for item {index + 1}")
                 except ValidationError as e:
                     error_message = f"""Validation failed for item {
                     index + 1
