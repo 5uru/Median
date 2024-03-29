@@ -1,7 +1,9 @@
 import io
 
-import PyPDF2
+import pypdf
 from docx import Document
+
+from median.utils import median_logger
 
 
 def read_docx(docx_file):
@@ -15,25 +17,31 @@ def read_docx(docx_file):
         doc = Document(docx_file)
     else:
         doc = Document(io.BytesIO(docx_file.read()))
-    content = "\n".join([paragraph.text for paragraph in doc.paragraphs])
-    return content
+    return "\n".join([paragraph.text for paragraph in doc.paragraphs])
 
 
 def read_pdf(pdf_file):
     """
-    Read the content of a PDF file.
+    Read the content of a PDF file with improved error handling and efficiency.
 
     :param pdf_file: The path to the PDF file or a file-like object.
     :return: The content of the PDF file as a string.
     """
-    if isinstance(pdf_file, str):
-        pdf_reader = PyPDF2.PdfReader(pdf_file)
-    else:
-        pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_file.read()))
-    content = ""
-    for page in range(len(pdf_reader.pages)):
-        content += pdf_reader.pages[page].extract_text()
-    return content
+    try:
+        if isinstance(pdf_file, str):
+            with open(pdf_file, "rb") as f:
+                pdf_reader = pypdf.PdfReader(f)
+        else:
+            pdf_reader = pypdf.PdfReader(io.BytesIO(pdf_file.read()))
+
+        pages_text = [
+            pdf_reader.pages[page].extract_text()
+            for page in range(len(pdf_reader.pages))
+        ]
+        return "".join(pages_text)
+    except Exception as e:  # Consider catching more specific exceptions
+        median_logger.error(f"Error reading PDF file: {e}")
+        return None
 
 
 def main(file, file_type):
