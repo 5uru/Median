@@ -6,4 +6,4 @@ model_name = "mlx-community/Mistral-7B-Instruct-v0.2-4bit"
 load(model_name, lazy=False)
 
 
-spacy.cli.download("en_core_news_sm")
+spacy.cli.download("en_core_web_sm")
