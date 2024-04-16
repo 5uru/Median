@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from datetime import datetime
 from sqlite3 import Error
 
-from median.utils import median_logger
+from median.app.utils import median_logger
 
 DB_NAME = "flashcards.db"
 
@@ -46,13 +46,13 @@ def create_table():
         try:
             c.execute(
                 """CREATE TABLE IF NOT EXISTS flashcards
-                                 (id INTEGER PRIMARY KEY,
-                                  question TEXT, 
-                                  answer TEXT, 
-                                  model TEXT, 
-                                  lastTest TEXT,
-                                  total INTEGER,  
-                                  flashcardName TEXT)"""
+                                                                                                 (id INTEGER PRIMARY KEY,
+                                                                                                  question TEXT, 
+                                                                                                  answer TEXT, 
+                                                                                                  model TEXT, 
+                                                                                                  lastTest TEXT,
+                                                                                                  total INTEGER,  
+                                                                                                  flashcardName TEXT)"""
             )
             median_logger.info("Table flashcards created")
         except Error as e:
@@ -119,16 +119,16 @@ def select_flashcard_by_name(flashcard_name: str) -> list[tuple]:
         try:
             c.execute(
                 """
-        CREATE TABLE IF NOT EXISTS flashcards (
-            id INTEGER PRIMARY KEY,
-            flashcardName TEXT,
-            question TEXT,
-            answer TEXT,
-            model TEXT,
-            lastTest TEXT,
-            total INTEGER
-        )
-    """
+                                                                        CREATE TABLE IF NOT EXISTS flashcards (
+                                                                            id INTEGER PRIMARY KEY,
+                                                                            flashcardName TEXT,
+                                                                            question TEXT,
+                                                                            answer TEXT,
+                                                                            model TEXT,
+                                                                            lastTest TEXT,
+                                                                            total INTEGER
+                                                                        )
+                                                                    """
             )
             c.execute(
                 "SELECT * FROM flashcards WHERE flashcardName = ?", (flashcard_name,)
@@ -156,16 +156,16 @@ def select_all_unique_flashcard_names() -> list[str]:
         try:
             c.execute(
                 """
-        CREATE TABLE IF NOT EXISTS flashcards (
-            id INTEGER PRIMARY KEY,
-            flashcardName TEXT,
-            question TEXT,
-            answer TEXT,
-            model TEXT,
-            lastTest TEXT,
-            total INTEGER
-        )
-    """
+                                                                        CREATE TABLE IF NOT EXISTS flashcards (
+                                                                            id INTEGER PRIMARY KEY,
+                                                                            flashcardName TEXT,
+                                                                            question TEXT,
+                                                                            answer TEXT,
+                                                                            model TEXT,
+                                                                            lastTest TEXT,
+                                                                            total INTEGER
+                                                                        )
+                                                                    """
             )
             c.execute("SELECT DISTINCT flashcardName FROM flashcards")
             median_logger.info("Selected all unique flashcard names")

@@ -2,7 +2,7 @@ from datetime import timedelta, datetime
 
 import ebisu
 
-from median.utils import median_logger
+from median.app.utils import median_logger
 
 
 def convert_to_datetime(date_str, date_format="%Y-%m-%d %H:%M:%S.%f"):
