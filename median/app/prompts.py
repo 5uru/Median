@@ -19,10 +19,12 @@ Here is a list of tools that you have available to you:
 
 ```python
 class Quiz(BaseModel):
+    """ """
     question: str
     answer: str
 
 class QuizCollection(BaseModel):
+    """ """
     collection: List[Quiz]
 ```
 
