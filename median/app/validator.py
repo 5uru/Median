@@ -43,94 +43,27 @@ def extract_json_from_markdown(text) :
         List[dict]: A list of extracted dictionaries from the text.
     """
 
-    # Regular expression pattern to match simple dictionary-like structures
-    dict_pattern = r"\{[^\{\}]*\}"
+    # Regex patterns
+    question_pattern = r'"question": "(.*?)"'
+    answer_pattern = r'"answer": "(.*?)"'
 
-    # Find all substrings that look like dictionaries
-    potential_dicts = re.findall(dict_pattern , text)
+    # Find questions and answers
+    questions = re.findall(question_pattern , text)
+    answers = re.findall(answer_pattern , text)
 
-    extracted_dicts = [ ]
-    for d_str in potential_dicts :
-        # Convert the string representation of dictionary to actual dictionary
-        try :
-            # Safe literal evaluation of dict string
-            d = ast.literal_eval(d_str)
-            if isinstance(d , dict) :  # Ensure it is a dictionary
-                extracted_dicts.append(d)
-                median_logger.info(f"Extracted dictionary: {d}")
-        except (ValueError , SyntaxError) :
-            # Skip if conversion fails
-            median_logger.error(f"Failed to convert {d_str} to dictionary")
+    # Create a collection of quizzes
+    quizzes = [ { "question" : q , "answer" : a } for q , a in zip(questions , answers) ]
 
-    return extracted_dicts
-
-
-def load_json_data(json_object) :
-    """
-    Attempts to load JSON data using json.loads, ast.literal_eval, or extracting JSON-like structures.
-
-    Args:
-        json_object: The JSON object to load.
-
-    Returns:
-        tuple: A tuple containing the loaded JSON object and an error message if loading fails.
-    """
-    result_json = None
-    error_message = None
-
-    try :
-        result_json = json.loads(json_object)
-        median_logger.info(f"JSON data: {result_json} using json.loads")
-    except json.decoder.JSONDecodeError :
-        median_logger.error("Failed to load JSON data using json.loads")
-        try :
-            result_json = ast.literal_eval(json_object)
-            median_logger.info(f"JSON data: {result_json} using ast.literal_eval")
-        except (SyntaxError , ValueError) :
-            median_logger.error("Failed to load JSON data using ast.literal_eval")
-            try :
-                result_json = extract_json_from_markdown(json_object)
-            except Exception as e :
-                error_message = f"JSON decoding error: {e}"
-                median_logger.error(error_message)
-
-    return result_json , error_message
-
-
-def validate_json_against_schema(result_json) :
-    """
-    Validates JSON data against a schema.
-
-    Args:
-        result_json: The JSON object to validate.
-
-    Returns:
-        tuple: A tuple containing a boolean indicating validation success and an error message if validation fails.
-    """
-    valid = False
-    error_message = None
-
-    try :
-        if isinstance(result_json , list) :
-            median_logger.info("List found, validating each item")
-            for index , item in enumerate(result_json) :
-                validate(instance=item , schema=json_schema)
-                median_logger.info(f"Validation successful for item {index + 1}")
-        else :
-            median_logger.info("No list found, validating without list")
-            validate(instance=result_json , schema=json_schema)
-            median_logger.info("Validation successful")
-        valid = True
-    except ValidationError as e :
-        error_message = f"Validation failed: {e}"
-        median_logger.error(error_message)
-
-    return valid , error_message
+    # Return the collection of quizzes
+    if questions and answers :
+        return { "collection" : quizzes }
+    else :
+        return None
 
 
 def validate_json_data(json_object) :
     """
-    Validates JSON data by attempting to load it and then validating it against a schema.
+    Validates JSON data by attempting to load it using json loads, ast.literal_eval, or extracting JSON-like structures.
 
     Args:
         json_object: The JSON object to validate.
@@ -138,17 +71,55 @@ def validate_json_data(json_object) :
     Returns:
         tuple: A tuple containing a boolean indicating validation success, the parsed JSON object, and an error message if validation fails.
     """
-    result_json , error_message = load_json_data(json_object)
 
-    if error_message is not None :
+    valid = False
+    error_message = None
+    result_json = None
+
+    try :
+        # Attempt to load JSON using json.loads
+        try :
+            result_json = json.loads(json_object)
+            median_logger.info(f"JSON data: {result_json} using json.loads")
+        except json.decoder.JSONDecodeError :
+            # If json.loads fails, try ast.literal_eval
+            median_logger.error("Failed to load JSON data using json.loads")
+            try :
+                result_json = ast.literal_eval(json_object)
+                median_logger.info(f"JSON data: {result_json} using ast.literal_eval")
+            except (SyntaxError , ValueError) :
+                # If both json.loads and ast.literal_eval fail, try extracting JSON-like structures
+                median_logger.error("Failed to load JSON data using ast.literal_eval")
+                try :
+                    result_json = extract_json_from_markdown(json_object)
+                except Exception as e :
+                    error_message = f"JSON decoding error: {e}"
+                    median_logger.error(error_message)
+                    return valid , result_json , error_message
+
+        # Return early if both json.loads and ast.literal_eval fail
+        if result_json is None :
+            error_message = "Failed to decode JSON data"
+            median_logger.error(error_message)
+            return valid , result_json , error_message
+        else :
+            median_logger.info(f"JSON data: {result_json}")
+            # Validate each item in the list against schema if it's a list
+            try :
+                validate(instance=result_json , schema=json_schema)
+                median_logger.info("Validation successful")
+            except ValidationError as e :
+                error_message = f"Validation failed: {e}"
+                median_logger.error(error_message)
+
+    except Exception as e :
+        error_message = f"Error occurred: {e}"
         median_logger.error(error_message)
-        return False , result_json , error_message
 
-    valid , error_message = validate_json_against_schema(result_json)
-
-    if error_message is not None :
-        median_logger.error("Validation failed")
-    else :
+    if error_message is None :
+        valid = True
         median_logger.info("Validation successful")
+    else :
+        median_logger.error("Validation failed")
 
     return valid , result_json , error_message
